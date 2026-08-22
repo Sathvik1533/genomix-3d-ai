@@ -1,5 +1,5 @@
 /**
- * PROTERA // RAW REALISTIC 3D DNA DOUBLE HELIX & MOLECULAR PHARMACOLOGY ENGINE
+ * ENUMERA // RAW REALISTIC 3D DNA DOUBLE HELIX & MOLECULAR PHARMACOLOGY ENGINE
  * Full 360° Free Mouse Orbit • Physical Subsurface Ribbons & Ball-and-Stick Atomic Rungs
  */
 
@@ -15,10 +15,10 @@ let dnaGroup, ribbonMesh1, ribbonMesh2, rungsGroup, drugLigandGroup;
 // Active Sequence State
 const BASES = ['A', 'T', 'G', 'C'];
 const BASE_COLORS = {
-  A: 0x2563eb, // Royal Sapphire Blue
-  T: 0xe11d48, // Precision Crimson
-  G: 0x059669, // Emerald
-  C: 0xd97706  // Amber Gold
+  A: 0x38bdf8, // Bioluminescent Phosphor Cyan
+  T: 0xf43f5e, // Precision Crimson
+  G: 0x10b981, // Cellular Emerald
+  C: 0xf59e0b  // Amber Gold
 };
 
 let activeSequence = [
@@ -32,28 +32,28 @@ const DRUG_DATA = {
     kd: 'Kd = 1.4 nM',
     res: 't1/2 = 4.8 hr',
     status: 'BOUND (CFTR Exon 10)',
-    color: 0x2563eb
+    color: 0x38bdf8
   },
   nusinersen: {
     energy: '-16.8 kcal/mol',
     kd: 'Kd = 0.8 nM',
     res: 't1/2 = 135 days',
     status: 'BOUND (SMN2 Exon 7)',
-    color: 0x059669
+    color: 0x10b981
   },
   casgevy: {
     energy: '-19.4 kcal/mol',
     kd: '99.98% Fidelity',
     res: 'Permanent Edit',
     status: 'BOUND (BCL11A Enhancer)',
-    color: 0x7c3aed
+    color: 0xc084fc
   },
   patisiran: {
     energy: '-12.6 kcal/mol',
     kd: 't1/2 = 4.8 hr',
     res: 't1/2 = 9.2 days',
     status: 'BOUND (TTR 3\' UTR)',
-    color: 0xd97706
+    color: 0xf59e0b
   }
 };
 
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function initEngine() {
   const container = document.getElementById('webgl-stage');
   scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0xf8fafc, 0.035);
+  scene.fog = new THREE.FogExp2(0x0e1117, 0.035);
 
   camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.set(0, 0.3, 8.8);
@@ -88,7 +88,7 @@ function initEngine() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.25;
+  renderer.toneMappingExposure = 1.3;
   container.appendChild(renderer.domElement);
 
   // Full 360° OrbitControls
@@ -99,19 +99,19 @@ function initEngine() {
   controls.minDistance = 3.0;
   controls.enablePan = false;
 
-  // Studio Lighting (Clean, Bright, Pearlescent Reflections)
-  const ambient = new THREE.AmbientLight(0xffffff, 2.2);
+  // Studio Lighting (Clean, Warm Laboratory Specular Highlights)
+  const ambient = new THREE.AmbientLight(0xffffff, 2.0);
   scene.add(ambient);
 
-  const mainLight = new THREE.DirectionalLight(0xffffff, 2.0);
+  const mainLight = new THREE.DirectionalLight(0xffffff, 2.2);
   mainLight.position.set(5, 8, 5);
   scene.add(mainLight);
 
-  const fillBlue = new THREE.PointLight(0x2563eb, 2.5, 20);
-  fillBlue.position.set(-5, 4, 3);
-  scene.add(fillBlue);
+  const fillCyan = new THREE.PointLight(0x38bdf8, 2.8, 20);
+  fillCyan.position.set(-5, 4, 3);
+  scene.add(fillCyan);
 
-  const warmRim = new THREE.PointLight(0xffedd5, 1.8, 20);
+  const warmRim = new THREE.PointLight(0xfef08a, 1.6, 20);
   warmRim.position.set(0, -6, -4);
   scene.add(warmRim);
 
@@ -139,7 +139,6 @@ function buildRawRealisticDNA() {
   const strand2Pts = [];
   rungsGroup = new THREE.Group();
 
-  // Atom sphere geometries & materials
   const atomGeo = new THREE.SphereGeometry(0.09, 16, 16);
   const hydrogenBondGeo = new THREE.CylinderGeometry(0.045, 0.045, radius, 12);
 
@@ -163,9 +162,9 @@ function buildRawRealisticDNA() {
     // Half Rung 1 (Cylinder + End Atom)
     const rMat1 = new THREE.MeshPhysicalMaterial({
       color: BASE_COLORS[base1],
-      roughness: 0.2,
-      metalness: 0.1,
-      clearcoat: 0.8
+      roughness: 0.22,
+      metalness: 0.15,
+      clearcoat: 0.9
     });
     const rMesh1 = new THREE.Mesh(hydrogenBondGeo, rMat1);
     rMesh1.position.set((x1 + pMid.x) / 2, y, (z1 + pMid.z) / 2);
@@ -179,9 +178,9 @@ function buildRawRealisticDNA() {
     // Half Rung 2
     const rMat2 = new THREE.MeshPhysicalMaterial({
       color: BASE_COLORS[base2],
-      roughness: 0.2,
-      metalness: 0.1,
-      clearcoat: 0.8
+      roughness: 0.22,
+      metalness: 0.15,
+      clearcoat: 0.9
     });
     const rMesh2 = new THREE.Mesh(hydrogenBondGeo, rMat2);
     rMesh2.position.set((x2 + pMid.x) / 2, y, (z2 + pMid.z) / 2);
@@ -206,14 +205,14 @@ function buildRawRealisticDNA() {
   const curve2 = new THREE.CatmullRomCurve3(strand2Pts);
 
   const ribbonMat = new THREE.MeshPhysicalMaterial({
-    color: 0x2563eb,
-    emissive: 0x1d4ed8,
-    emissiveIntensity: 0.15,
+    color: 0x38bdf8,
+    emissive: 0x0284c7,
+    emissiveIntensity: 0.25,
     roughness: 0.18,
-    metalness: 0.15,
+    metalness: 0.2,
     clearcoat: 1.0,
     clearcoatRoughness: 0.1,
-    transmission: 0.2,
+    transmission: 0.22,
     thickness: 0.5
   });
 
@@ -234,11 +233,10 @@ function buildRawRealisticDNA() {
 function build3DDrugLigand() {
   drugLigandGroup = new THREE.Group();
 
-  // Chemical Small-Molecule Carbon Ring Polyhedron
   const ringGeo = new THREE.IcosahedronGeometry(0.36, 1);
   const ringMat = new THREE.MeshPhysicalMaterial({
-    color: 0x2563eb,
-    emissive: 0x1e40af,
+    color: 0x38bdf8,
+    emissive: 0x0284c7,
     emissiveIntensity: 0.8,
     metalness: 0.4,
     roughness: 0.2,
@@ -248,8 +246,7 @@ function build3DDrugLigand() {
   const ring = new THREE.Mesh(ringGeo, ringMat);
   drugLigandGroup.add(ring);
 
-  // Heteroatom Spheres (Nitrogen / Oxygen / Fluorine)
-  const atomMat = new THREE.MeshStandardMaterial({ color: 0x059669, metalness: 0.5, roughness: 0.2 });
+  const atomMat = new THREE.MeshStandardMaterial({ color: 0x10b981, metalness: 0.5, roughness: 0.2 });
   const bondMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 0.3 });
 
   const atomOffsets = [
@@ -333,7 +330,7 @@ function triggerDockingAnimation() {
 
   drugLigandGroup.visible = true;
   document.getElementById('telem-status').textContent = 'DOCKING IN PROGRESS...';
-  document.getElementById('telem-status').style.color = '#d97706';
+  document.getElementById('telem-status').style.color = '#f59e0b';
 
   let t = 0;
   const interval = setInterval(() => {
@@ -345,7 +342,7 @@ function triggerDockingAnimation() {
     if (t >= 1) {
       clearInterval(interval);
       document.getElementById('telem-status').textContent = DRUG_DATA[currentDrugKey].status;
-      document.getElementById('telem-status').style.color = '#059669';
+      document.getElementById('telem-status').style.color = '#10b981';
       playAcousticTone(1040, 0.25);
     }
   }, 25);
@@ -398,7 +395,7 @@ function injectMutation() {
   buildRawRealisticDNA();
 
   document.getElementById('telem-status').textContent = 'PATHOGENIC VARIANT DETECTED';
-  document.getElementById('telem-status').style.color = '#e11d48';
+  document.getElementById('telem-status').style.color = '#f43f5e';
   document.getElementById('telem-energy').textContent = '-8.4 kcal/mol';
 }
 
@@ -409,7 +406,7 @@ function restoreWildtype() {
   buildRawRealisticDNA();
 
   document.getElementById('telem-status').textContent = 'WILDTYPE RESTING';
-  document.getElementById('telem-status').style.color = '#059669';
+  document.getElementById('telem-status').style.color = '#10b981';
   document.getElementById('telem-energy').textContent = '-14.2 kcal/mol';
 }
 
@@ -454,7 +451,7 @@ function toggleAudio() {
 
 function initCursor() {
   const dot = document.getElementById('cursor-dot');
-  const aura = document.getElementById('cursor-aura');
+  const ring = document.getElementById('cursor-ring');
   let cx = 0, cy = 0, rx = 0, ry = 0;
 
   document.addEventListener('mousemove', e => {
@@ -463,13 +460,13 @@ function initCursor() {
     if (dot) dot.style.transform = `translate(${cx}px, ${cy}px)`;
   });
 
-  function updateAura() {
+  function updateRing() {
     rx += (cx - rx) * 0.15;
     ry += (cy - ry) * 0.15;
-    if (aura) aura.style.transform = `translate(${rx}px, ${ry}px)`;
-    requestAnimationFrame(updateAura);
+    if (ring) ring.style.transform = `translate(${rx}px, ${ry}px)`;
+    requestAnimationFrame(updateRing);
   }
-  updateAura();
+  updateRing();
 }
 
 function openAccessModal() {
