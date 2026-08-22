@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GENOMIX 3D | Next-Gen AI Genomics & Neural Connectomics</title>
+  <meta name="description" content="Award-winning interactive 3D medical landing page featuring real-time DNA double helix CRISPR gene editing, holographic neural brain mapping, and quantum biometrics.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Three.js & OrbitControls -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- 3D WebGL Background Canvas Container -->
+  <div id="webgl-canvas" class="webgl-container"></div>
+
+  <!-- Ambient Light Orbs -->
+  <div class="ambient-glow glow-cyan"></div>
+  <div class="ambient-glow glow-purple"></div>
+
+  <!-- UI Foreground Layer -->
+  <div class="ui-layer">
+
+    <!-- Navigation Header -->
+    <header class="navbar">
+      <div class="nav-container">
+        <a href="#" class="brand-logo">
+          <div class="brand-icon">
+            <i data-lucide="dna"></i>
+          </div>
+          <div class="brand-text">
+            <span>GENOMIX</span><span class="text-gradient">.AI</span>
+            <span class="badge-tag">3D RESEARCH</span>
+          </div>
+        </a>
+
+        <ul class="nav-menu">
+          <li><a href="#hero" class="nav-link active">3D Lab</a></li>
+          <li><a href="#pipeline" class="nav-link">Research Pipeline</a></li>
+          <li><a href="#calculator" class="nav-link">Genomic Calculator</a></li>
+          <li><a href="#trials" class="nav-link">Clinical Trials</a></li>
+          <li><a href="#publications" class="nav-link">Whitepapers</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <button id="audio-toggle" class="btn-icon" title="Toggle Bio-Acoustic FX" onclick="toggleAudio()">
+            <i data-lucide="volume-2" id="audio-icon"></i>
+          </button>
+          <button class="btn-primary" onclick="openEnrollModal()">
+            <i data-lucide="calendar"></i>
+            <span>Enroll in Trial</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Hero Section -->
+    <section id="hero" class="hero-section">
+      <div class="hero-grid">
+        
+        <!-- Left Hero Column: Biotech Story & Interactive Controls -->
+        <div class="hero-left">
+          <div class="badge-live">
+            <span class="pulse-indicator"></span>
+            <span class="badge-text">CRISPR-Cas9 & Neural Connectome Online</span>
+          </div>
+
+          <h1 class="hero-heading">
+            Decoding Life at <br>
+            <span class="text-gradient-shimmer">Sub-Angstrom</span> Precision
+          </h1>
+
+          <p class="hero-description">
+            Experience real-time interactive 3D genomics and holographic neural mapping. Simulate CRISPR-Cas9 prime gene editing, inspect synaptic action potentials, and discover personalized precision oncology therapeutics.
+          </p>
+
+          <!-- 3D Scene Mode Selector Tabs -->
+          <div class="glass-card mode-switcher-card">
+            <div class="card-header-flex">
+              <span class="hud-label"><i data-lucide="layers"></i> 3D Holographic Viewport Mode</span>
+              <span class="status-live">● 60 FPS WebGL</span>
+            </div>
+            <div class="mode-tabs">
+              <button class="mode-tab active" onclick="switch3DMode('dna')">
+                <i data-lucide="dna"></i>
+                <span>DNA Double Helix</span>
+              </button>
+              <button class="mode-tab" onclick="switch3DMode('brain')">
+                <i data-lucide="brain"></i>
+                <span>Neural Connectome</span>
+              </button>
+              <button class="mode-tab" onclick="switch3DMode('cell')">
+                <i data-lucide="shield-plus"></i>
+                <span>Cellular Immuno</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Interactive DNA Sequence Matrix (for DNA mode) -->
+          <div id="dna-controls" class="glass-card sequence-builder-card">
+            <div class="card-header-flex">
+              <span class="hud-label"><i data-lucide="binary"></i> Nucleotide Sequence Matrix (Chr 7q31.2)</span>
+              <span class="sequence-id" id="locus-id">CFTR Exon 10</span>
+            </div>
+
+            <!-- Editable nucleotide sequence row -->
+            <div class="sequence-row" id="sequence-row">
+              <!-- Dynamically populated -->
+            </div>
+
+            <div class="base-legend-row">
+              <span class="base-badge base-a">A • Adenine</span>
+              <span class="base-badge base-t">T • Thymine</span>
+              <span class="base-badge base-g">G • Guanine</span>
+              <span class="base-badge base-c">C • Cytosine</span>
+            </div>
+
+            <div class="action-btn-group mt-3">
+              <button class="btn-glow-emerald" onclick="triggerCrisprCleavage()">
+                <i data-lucide="scissors"></i>
+                <span>Execute CRISPR Cleave</span>
+              </button>
+              <button class="btn-ghost" onclick="introduceMutation()">
+                <i data-lucide="sparkles"></i>
+                <span>Test Mutation</span>
+              </button>
+              <button class="btn-ghost" onclick="resetSequence()">
+                <i data-lucide="rotate-ccw"></i>
+                <span>Reset Wildtype</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Interactive Brain Lobe Controls (for Brain mode) -->
+          <div id="brain-controls" class="glass-card brain-controller-card" style="display: none;">
+            <div class="card-header-flex">
+              <span class="hud-label"><i data-lucide="activity"></i> Cortical Lobe Segmentation</span>
+              <span class="sequence-id" id="active-lobe-name">Full Connectome</span>
+            </div>
+            <div class="lobe-grid">
+              <button class="lobe-pill active" onclick="selectCorticalLobe('all')">All Lobes</button>
+              <button class="lobe-pill" onclick="selectCorticalLobe('frontal')">Frontal (Cognition)</button>
+              <button class="lobe-pill" onclick="selectCorticalLobe('parietal')">Parietal (Sensory)</button>
+              <button class="lobe-pill" onclick="selectCorticalLobe('temporal')">Temporal (Memory)</button>
+              <button class="lobe-pill" onclick="selectCorticalLobe('occipital')">Occipital (Visual)</button>
+              <button class="lobe-pill" onclick="selectCorticalLobe('cerebellum')">Cerebellum</button>
+            </div>
+            <div class="action-btn-group mt-3">
+              <button class="btn-glow-purple" onclick="triggerSynapticSparks()">
+                <i data-lucide="zap"></i>
+                <span>Fire Synaptic Action Potential</span>
+              </button>
+              <button class="btn-ghost" onclick="toggleTractography()">
+                <i data-lucide="git-branch"></i>
+                <span>Toggle Axons</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Hero Column: Real-Time Diagnostic HUD Cards -->
+        <div class="hero-right">
+          
+          <!-- Live Dynamic Signal Graph (ECG/EEG) -->
+          <div class="glass-card telemetry-card">
+            <div class="card-header-flex">
+              <div class="hud-label-group">
+                <span class="hud-label" id="wave-title">Real-Time Gene Expression & Bio-Signal</span>
+                <div class="hud-sub">Synchronized 60Hz Telemetry Stream</div>
+              </div>
+              <span class="badge-live-sm">LIVE FEED</span>
+            </div>
+
+            <canvas id="telemetry-canvas" width="340" height="95"></canvas>
+
+            <div class="telemetry-stats-bar">
+              <div class="stat-item">
+                <span class="stat-lbl">Signal Fidelity</span>
+                <span class="stat-num text-cyan" id="fidelity-val">99.98%</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-lbl">Base Pair Pitch</span>
+                <span class="stat-num text-emerald">3.4 nm</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-lbl">Target Risk</span>
+                <span class="stat-num text-rose" id="risk-stat">&lt;0.001%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2x2 Telemetry Metric Matrix -->
+          <div class="metrics-matrix-grid">
+            
+            <div class="glass-card metric-card">
+              <div class="metric-icon-wrap icon-cyan">
+                <i data-lucide="target"></i>
+              </div>
+              <div class="metric-info">
+                <span class="hud-label">CRISPR Targeting</span>
+                <div class="metric-value">99.9<span class="metric-unit">%</span></div>
+                <div class="metric-sub">Zero off-target cuts</div>
+              </div>
+            </div>
+
+            <div class="glass-card metric-card">
+              <div class="metric-icon-wrap icon-purple">
+                <i data-lucide="cpu"></i>
+              </div>
+              <div class="metric-info">
+                <span class="hud-label">Synaptic Nodes</span>
+                <div class="metric-value">15.4<span class="metric-unit">k</span></div>
+                <div class="metric-sub">Neural pathways mapped</div>
+              </div>
+            </div>
+
+            <div class="glass-card metric-card">
+              <div class="metric-icon-wrap icon-emerald">
+                <i data-lucide="flask-conical"></i>
+              </div>
+              <div class="metric-info">
+                <span class="hud-label">Binding Affinity</span>
+                <div class="metric-value">-12.8<span class="metric-unit">kcal</span></div>
+                <div class="metric-sub">Kd = 1.4 nM (Ultra-high)</div>
+              </div>
+            </div>
+
+            <div class="glass-card metric-card">
+              <div class="metric-icon-wrap icon-amber">
+                <i data-lucide="timer"></i>
+              </div>
+              <div class="metric-info">
+                <span class="hud-label">In Vivo Velocity</span>
+                <div class="metric-value">120<span class="metric-unit">m/s</span></div>
+                <div class="metric-sub">Axonal impulse rate</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Clinical Trial Status Card -->
+          <div class="glass-card trial-status-card">
+            <div class="card-header-flex">
+              <span class="hud-label"><i data-lucide="shield-check"></i> FDA Breakthrough Designation</span>
+              <span class="badge-phase">Phase III Enrolling</span>
+            </div>
+            <p class="trial-text">
+              Precision CRISPR-engineered AAV vector therapy for monogenic neuromuscular and oncogenic target indications.
+            </p>
+            <div class="trial-progress-wrap">
+              <div class="trial-progress-bar" style="width: 86%;"></div>
+            </div>
+            <div class="trial-footer-flex">
+              <span>Cohort Enrollment (860/1,000)</span>
+              <strong class="text-cyan">86% Completed</strong>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Viewport Floating Controls Bar at Bottom -->
+      <div class="viewport-dock">
+        <button class="dock-btn" onclick="reset3DCamera()" title="Reset Camera View">
+          <i data-lucide="compass"></i>
+          <span>Reset View</span>
+        </button>
+        <button class="dock-btn" id="btn-autorotate" onclick="toggleAutoRotate()" title="Toggle Auto-Rotation">
+          <i data-lucide="rotate-3d"></i>
+          <span id="rotate-txt">Pause Orbit</span>
+        </button>
+        <button class="dock-btn" onclick="zoomIn3D()" title="Zoom In">
+          <i data-lucide="zoom-in"></i>
+          <span>Zoom In</span>
+        </button>
+        <button class="dock-btn" onclick="zoomOut3D()" title="Zoom Out">
+          <i data-lucide="zoom-out"></i>
+          <span>Zoom Out</span>
+        </button>
+        <button class="dock-btn btn-highlight" onclick="explode3DView()" title="Explode View">
+          <i data-lucide="scan"></i>
+          <span>Inspect Structure</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Research Pipeline Section -->
+    <section id="pipeline" class="section-container">
+      <div class="section-header">
+        <div class="badge-live"><span class="pulse-indicator"></span> <span>Clinical Discovery Pipeline</span></div>
+        <h2 class="section-title">Translational <span class="text-gradient">Therapeutic</span> Pipeline</h2>
+        <p class="section-desc">From generative in-silico nucleotide design to human clinical trials, our autonomous biotechnology engine accelerates drug discovery by 10x.</p>
+      </div>
+
+      <div class="pipeline-grid">
+        
+        <div class="pipeline-card glass-card">
+          <div class="pipeline-header">
+            <span class="pipe-code">GMX-101</span>
+            <span class="badge-phase">Phase III</span>
+          </div>
+          <h3 class="pipe-title">CRISPR Cystic Fibrosis Correction</h3>
+          <p class="pipe-desc">Targeted in vivo correction of CFTR &Delta;F508 exon mutation using ultra-high fidelity Cas9 prime editing vectors.</p>
+          <div class="pipe-metrics">
+            <div class="pipe-metric-item">
+              <span>Target:</span> <strong>CFTR Exon 10</strong>
+            </div>
+            <div class="pipe-metric-item">
+              <span>Efficacy:</span> <strong class="text-emerald">98.4%</strong>
+            </div>
+          </div>
+          <div class="pipe-bar-bg"><div class="pipe-bar-fill" style="width: 85%;"></div></div>
+        </div>
+
+        <div class="pipeline-card glass-card">
+          <div class="pipeline-header">
+            <span class="pipe-code">GMX-204</span>
+            <span class="badge-phase">Phase II</span>
+          </div>
+          <h3 class="pipe-title">Neural Connectome Regeneration</h3>
+          <p class="pipe-desc">Neuro-trophic synaptic vector targeting cortical axonal sprouting following traumatic brain injury and stroke.</p>
+          <div class="pipe-metrics">
+            <div class="pipe-metric-item">
+              <span>Target:</span> <strong>BDNF / TrkB</strong>
+            </div>
+            <div class="pipe-metric-item">
+              <span>Efficacy:</span> <strong class="text-purple">92.1%</strong>
+            </div>
+          </div>
+          <div class="pipe-bar-bg"><div class="pipe-bar-fill" style="width: 60%; background: linear-gradient(90deg, var(--neon-purple), var(--neon-cyan));"></div></div>
+        </div>
+
+        <div class="pipeline-card glass-card">
+          <div class="pipeline-header">
+            <span class="pipe-code">GMX-309</span>
+            <span class="badge-phase">Phase I</span>
+          </div>
+          <h3 class="pipe-title">Targeted Immuno-Oncology Nanobot</h3>
+          <p class="pipe-desc">Bio-compatible lipid nanoparticle carrying dual siRNA and immune-checkpoint modulators directly into solid tumors.</p>
+          <div class="pipe-metrics">
+            <div class="pipe-metric-item">
+              <span>Target:</span> <strong>PD-L1 / VEGF</strong>
+            </div>
+            <div class="pipe-metric-item">
+              <span>Efficacy:</span> <strong class="text-cyan">95.7%</strong>
+            </div>
+          </div>
+          <div class="pipe-bar-bg"><div class="pipe-bar-fill" style="width: 35%;"></div></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Interactive AI Genomic Calculator -->
+    <section id="calculator" class="section-container">
+      <div class="section-header">
+        <div class="badge-live"><span class="pulse-indicator"></span> <span>AI Risk Simulator</span></div>
+        <h2 class="section-title">Interactive <span class="text-gradient-shimmer">Genomic Risk</span> Calculator</h2>
+        <p class="section-desc">Estimate CRISPR vector therapeutic response and variant pathogenicity scores in real time.</p>
+      </div>
+
+      <div class="calculator-box glass-card">
+        <div class="calc-grid">
+          
+          <div class="calc-inputs">
+            <div class="calc-control-group">
+              <div class="calc-label-row">
+                <label>DNA Base Substitution Frequency</label>
+                <span class="calc-val-badge" id="calc-sub-val">2.4%</span>
+              </div>
+              <input type="range" min="0.1" max="10.0" step="0.1" value="2.4" oninput="updateCalculator()">
+            </div>
+
+            <div class="calc-control-group">
+              <div class="calc-label-row">
+                <label>Target Exon GC Content</label>
+                <span class="calc-val-badge" id="calc-gc-val">52%</span>
+              </div>
+              <input type="range" min="20" max="80" step="1" value="52" oninput="updateCalculator()">
+            </div>
+
+            <div class="calc-control-group">
+              <div class="calc-label-row">
+                <label>Synaptic Density Index</label>
+                <span class="calc-val-badge" id="calc-syn-val">88</span>
+              </div>
+              <input type="range" min="40" max="100" step="1" value="88" oninput="updateCalculator()">
+            </div>
+          </div>
+
+          <div class="calc-results">
+            <div class="calc-score-card">
+              <span class="hud-label">Predicted Cleavage Success Score</span>
+              <div class="calc-big-num text-gradient-shimmer" id="calc-score">99.4%</div>
+              <div class="calc-status-badge text-emerald">● Optimal Therapeutic Window</div>
+            </div>
+
+            <div class="calc-sub-metrics">
+              <div class="sub-stat">
+                <span>Off-Target Likelihood:</span> <strong class="text-cyan">&lt; 0.002%</strong>
+              </div>
+              <div class="sub-stat">
+                <span>Vector Delivery Bio-availability:</span> <strong class="text-emerald">94.8%</strong>
+              </div>
+              <div class="sub-stat">
+                <span>Estimated Remission Rate:</span> <strong class="text-purple">96.2%</strong>
+              </div>
+            </div>
+
+            <button class="btn-primary w-full mt-3" onclick="openEnrollModal()">
+              <span>Generate Full Diagnostic Report</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Whitepapers & Publications -->
+    <section id="publications" class="section-container">
+      <div class="section-header">
+        <div class="badge-live"><span class="pulse-indicator"></span> <span>Peer-Reviewed Science</span></div>
+        <h2 class="section-title">Latest <span class="text-gradient">Scientific</span> Publications</h2>
+      </div>
+
+      <div class="publications-grid">
+        <div class="pub-card glass-card">
+          <span class="pub-journal">Nature Biotechnology • 2026</span>
+          <h4 class="pub-title">Autonomous 3D Spatial Lidar and CRISPR-Cas9 Prime Editing of Monogenic Disorders</h4>
+          <p class="pub-authors">Sathvik, K., Chen, L., Robertson, M. et al.</p>
+          <div class="pub-actions">
+            <span class="doi-text">doi:10.1038/s41587-026-0042</span>
+            <button class="btn-ghost-sm" onclick="alert('Whitepaper PDF generated & downloading.')">Download PDF ↗</button>
+          </div>
+        </div>
+
+        <div class="pub-card glass-card">
+          <span class="pub-journal">Cell Genomics • 2026</span>
+          <h4 class="pub-title">Quantitative 3D Connectome Mapping and High-Throughput Synaptic Electro-Mechanics</h4>
+          <p class="pub-authors">Vanderbilt, E., Nakamoto, S., Gupta, R. et al.</p>
+          <div class="pub-actions">
+            <span class="doi-text">doi:10.1016/j.cellgen.2026.01</span>
+            <button class="btn-ghost-sm" onclick="alert('Whitepaper PDF generated & downloading.')">Download PDF ↗</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-brand">
+          <div class="brand-logo">
+            <div class="brand-icon"><i data-lucide="dna"></i></div>
+            <div class="brand-text"><span>GENOMIX</span><span class="text-gradient">.AI</span></div>
+          </div>
+          <p class="footer-tagline">Pioneering the future of quantum genomics, holographic neural mapping, and AI precision therapeutics.</p>
+        </div>
+
+        <div class="footer-links-group">
+          <div class="footer-col">
+            <h5>3D Technologies</h5>
+            <a href="javascript:void(0)" onclick="switch3DMode('dna')">CRISPR DNA Helix</a>
+            <a href="javascript:void(0)" onclick="switch3DMode('brain')">Neural Connectome</a>
+            <a href="javascript:void(0)" onclick="switch3DMode('cell')">Cellular Immuno-Oncology</a>
+          </div>
+          <div class="footer-col">
+            <h5>Clinical Research</h5>
+            <a href="#pipeline">Therapeutic Pipeline</a>
+            <a href="#calculator">Risk Assessment</a>
+            <a href="#publications">Peer-Reviewed Papers</a>
+          </div>
+          <div class="footer-col">
+            <h5>Compliance & Code</h5>
+            <a href="https://github.com" target="_blank">GitHub Repository ↗</a>
+            <a href="javascript:void(0)" onclick="openEnrollModal()">Trial Enrollment</a>
+            <a href="javascript:void(0)">HIPAA & FDA Standards</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 GENOMIX AI Biotherapeutics Inc. All Rights Reserved. Built with Three.js WebGL & Quantum Shaders.</p>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Clinical Trial Enrollment Modal -->
+  <div id="enroll-modal" class="modal-overlay">
+    <div class="modal-card glass-card">
+      <div class="modal-header">
+        <div class="brand-icon"><i data-lucide="dna"></i></div>
+        <h3 class="modal-title">Clinical Trial & Genomic Portal</h3>
+        <button class="modal-close" onclick="closeEnrollModal()"><i data-lucide="x"></i></button>
+      </div>
+      <p class="modal-sub">
+        Submit patient genomic data or register an institutional research team for our 3D CRISPR vector trials.
+      </p>
+
+      <form onsubmit="handleEnrollSubmit(event)" class="modal-form">
+        <div class="form-group">
+          <label>Full Name / Principal Investigator</label>
+          <input type="text" placeholder="Dr. Alexander Vance" required class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Institutional Email Address</label>
+          <input type="email" placeholder="avance@genomix-biotech.org" required class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Clinical Trial Specialization</label>
+          <select class="form-input">
+            <option>CRISPR-Cas9 Monogenic Vector Trial (Phase III)</option>
+            <option>Neural Connectome Regeneration (Phase II)</option>
+            <option>Targeted Oncology Nanomedicine (Phase I)</option>
+            <option>Whole-Genome Deep Sequencing (50x WGS)</option>
+          </select>
+        </div>
+        <div class="modal-actions mt-3">
+          <button type="submit" class="btn-primary w-full">
+            <i data-lucide="send"></i>
+            <span>Confirm Trial Registration</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main JavaScript Engine -->
+  <script src="app.js"></script>
+  <script>
+    // Initialize Lucide icons
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    });
+  </script>
+</body>
+</html>
