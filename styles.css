@@ -1,21 +1,21 @@
-/* Hallmark · macrostructure: apparatus · theme: lumen · drop: night · pre-emit critique: P5 H5 E5 S5 R5 V5 */
+/* Hallmark · macrostructure: apparatus · theme: lumen · drop: night · stack: shadcn-aceternity · pre-emit critique: P5 H5 E5 S5 R5 V5 */
 
 /* ==========================================================================
-   ENUMERA // LUMEN NIGHT FOUNDRY DESIGN SYSTEM
-   Two-Register Typography: Instrument Serif + Plus Jakarta Sans + JetBrains Mono
-   Strict Hallmark Anti-AI-Slop Compliant (58 Gates Passed)
+   ENUMERA // SHADCN + ACETERNITY + REACT BITS CRAFT SYSTEM
+   Spotlight Beams • Dynamic Radial Bento Grid • Two-Register Typography
    ========================================================================== */
 
 :root {
   /* Hallmark Lumen Night Palette */
-  --color-paper: #0d1117;
-  --color-surface: #131722;
-  --color-surface-elevated: #1a202e;
-  --color-card: rgba(19, 23, 34, 0.78);
-  --color-card-hover: rgba(26, 32, 46, 0.88);
+  --color-paper: #0c1017;
+  --color-surface: #121722;
+  --color-surface-elevated: #181f2e;
+  --color-card: rgba(18, 23, 34, 0.75);
+  --color-card-border: rgba(255, 255, 255, 0.08);
 
   /* Functional Precision Accents */
   --color-accent: #38bdf8;
+  --color-accent-glow: rgba(56, 189, 248, 0.25);
   --color-accent-light: rgba(56, 189, 248, 0.12);
   --color-accent-emerald: #10b981;
   --color-accent-emerald-light: rgba(16, 185, 129, 0.12);
@@ -25,7 +25,7 @@
   --color-accent-gold-light: rgba(245, 158, 11, 0.12);
   --color-accent-rose: #f43f5e;
 
-  /* Typography Stacks */
+  /* Typography */
   --font-serif: 'Instrument Serif', Georgia, serif;
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -36,12 +36,7 @@
   --color-ink-muted: #64748b;
   --color-ink-subtle: #334155;
 
-  /* Hairline Rules */
-  --rule-subtle: rgba(255, 255, 255, 0.08);
-  --rule-light: rgba(255, 255, 255, 0.14);
-  --rule-accent: rgba(56, 189, 248, 0.4);
-
-  /* Named Spacing Scale */
+  /* Spacing Scale */
   --space-3xs: 4px;
   --space-2xs: 8px;
   --space-xs: 12px;
@@ -52,9 +47,9 @@
   --space-2xl: 64px;
   --space-3xl: 96px;
 
-  /* Elevation Shadows */
-  --shadow-card: 0 16px 45px rgba(0, 0, 0, 0.45);
-  --shadow-floating: 0 30px 80px rgba(0, 0, 0, 0.65);
+  /* Shadows */
+  --shadow-bento: 0 20px 50px rgba(0, 0, 0, 0.5);
+  --shadow-spotlight: 0 0 35px rgba(56, 189, 248, 0.18);
 }
 
 *, *::before, *::after {
@@ -77,6 +72,39 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================================================
+   ACETERNITY BACKGROUND EFFECTS & GRAIN
+   ========================================================================== */
+
+.spotlight-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(circle 600px at var(--mouse-screen-x, 50vw) var(--mouse-screen-y, 40vh), rgba(56, 189, 248, 0.045), transparent 70%);
+}
+
+.grid-pattern-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.035;
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+}
+
+.film-grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
 /* ==========================================================================
@@ -130,7 +158,7 @@ body {
 }
 
 /* ==========================================================================
-   UI SHELL & TOP NAVIGATION
+   UI SHELL & SHADCN NAVBAR
    ========================================================================== */
 
 .ui-shell {
@@ -139,7 +167,7 @@ body {
   pointer-events: none;
 }
 
-a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .viewport-controls-dock, .pipe-row, .modal-window {
+a, button, input, select, textarea, .bento-card, .btn-primary, .action-bento-panel, .viewport-dock, .bento-row, .modal-window {
   pointer-events: auto;
 }
 
@@ -149,10 +177,10 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   left: 0;
   right: 0;
   height: 72px;
-  background: rgba(13, 17, 23, 0.85);
+  background: rgba(12, 16, 23, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--rule-subtle);
+  border-bottom: 1px solid var(--color-card-border);
   z-index: 100;
   display: flex;
   align-items: center;
@@ -168,14 +196,14 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   justify-content: space-between;
 }
 
-.brand-link {
+.brand-entity {
   display: flex;
   align-items: center;
   gap: var(--space-2xs);
   text-decoration: none;
 }
 
-.brand-symbol {
+.brand-spark {
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -191,24 +219,26 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   letter-spacing: -0.01em;
 }
 
-.brand-mono {
+.brand-badge {
   font-family: var(--font-mono);
   font-size: 0.65rem;
   color: var(--color-ink-muted);
   letter-spacing: 0.08em;
 }
 
-.center-apparatus-badge {
+.shimmer-pill-badge {
   display: flex;
   align-items: center;
   gap: var(--space-2xs);
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--rule-subtle);
+  border: 1px solid var(--color-card-border);
   padding: var(--space-3xs) var(--space-xs);
   border-radius: 9999px;
+  position: relative;
+  overflow: hidden;
 }
 
-.pulse-indicator {
+.pulse-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
@@ -216,7 +246,7 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   box-shadow: 0 0 8px var(--color-accent-emerald);
 }
 
-.badge-text {
+.shimmer-text {
   font-family: var(--font-mono);
   font-size: 0.68rem;
   letter-spacing: 0.08em;
@@ -229,9 +259,9 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   gap: var(--space-sm);
 }
 
-.sound-toggle {
+.sound-toggle-btn {
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--rule-subtle);
+  border: 1px solid var(--color-card-border);
   color: var(--color-ink-secondary);
   font-family: var(--font-mono);
   font-size: 0.72rem;
@@ -244,36 +274,37 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-.sound-icon {
+.sound-waves {
   display: inline-flex;
   align-items: center;
   gap: 2px;
   height: 10px;
 }
 
-.sound-icon span {
+.sound-waves span {
   width: 2px;
   height: 100%;
   background-color: var(--color-accent);
   border-radius: 1px;
   animation: barPings 1.2s infinite ease-in-out alternate;
 }
-.sound-icon span:nth-child(2) { animation-delay: 0.3s; }
-.sound-icon span:nth-child(3) { animation-delay: 0.6s; }
+.sound-waves span:nth-child(2) { animation-delay: 0.3s; }
+.sound-waves span:nth-child(3) { animation-delay: 0.6s; }
 
 @keyframes barPings {
   0% { height: 20%; }
   100% { height: 100%; }
 }
 
-.sound-toggle:hover {
+.sound-toggle-btn:hover {
   border-color: var(--color-ink-secondary);
   color: #ffffff;
 }
 
-.btn-primary {
+.btn-shimmer-primary {
+  position: relative;
   background: #f8fafc;
-  color: #0d1117;
+  color: #0c1017;
   font-family: var(--font-sans);
   font-weight: 600;
   font-size: 0.82rem;
@@ -281,12 +312,13 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   border-radius: 6px;
   border: none;
   cursor: pointer;
+  overflow: hidden;
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.btn-primary:hover {
+.btn-shimmer-primary:hover {
   background: var(--color-accent);
-  box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
 }
 
 /* ==========================================================================
@@ -310,7 +342,7 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   z-index: 20;
 }
 
-.eyebrow-row {
+.kicker-badge-row {
   display: flex;
   align-items: center;
   gap: var(--space-2xs);
@@ -319,11 +351,11 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   font-size: 0.72rem;
 }
 
-.eyebrow-num { color: var(--color-accent); }
-.eyebrow-sep { color: var(--color-ink-subtle); }
-.eyebrow-label { letter-spacing: 0.12em; color: var(--color-ink-muted); font-weight: 500; }
+.kicker-index { color: var(--color-accent); }
+.kicker-slash { color: var(--color-ink-subtle); }
+.kicker-label { letter-spacing: 0.12em; color: var(--color-ink-muted); font-weight: 500; }
 
-.hero-headline {
+.hero-title {
   font-family: var(--font-sans);
   font-size: clamp(2.8rem, 4.8vw, 4.4rem);
   font-weight: 700;
@@ -333,14 +365,14 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   margin-bottom: var(--space-xs);
 }
 
-.headline-serif {
+.hero-serif {
   font-family: var(--font-serif);
   font-style: italic;
   font-weight: 400;
   color: var(--color-accent);
 }
 
-.hero-lead {
+.hero-lede {
   color: var(--color-ink-secondary);
   font-size: 1.02rem;
   line-height: 1.65;
@@ -348,19 +380,19 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   max-width: 58ch;
 }
 
-/* Drug Apparatus Grid */
-.drug-apparatus-shelf {
+/* Aceternity Bento Drug Shelf */
+.bento-drug-shelf {
   margin-bottom: var(--space-sm);
 }
 
-.shelf-header {
+.shelf-top-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--space-2xs);
 }
 
-.shelf-title {
+.shelf-kicker {
   font-family: var(--font-mono);
   font-size: 0.65rem;
   letter-spacing: 0.08em;
@@ -368,23 +400,24 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   font-weight: 500;
 }
 
-.shelf-orbit-hint {
+.shelf-orbit-cue {
   font-family: var(--font-mono);
   font-size: 0.65rem;
   color: var(--color-accent);
 }
 
-.drug-grid {
+.bento-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-2xs);
 }
 
-.drug-card {
+.bento-card {
+  position: relative;
   background: var(--color-card);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--rule-subtle);
+  border: 1px solid var(--color-card-border);
   border-radius: 10px;
   padding: var(--space-xs) var(--space-sm);
   cursor: pointer;
@@ -392,17 +425,36 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   display: flex;
   flex-direction: column;
   gap: var(--space-3xs);
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-bento);
+  overflow: hidden;
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease;
 }
 
-.card-top-row {
+/* Spotlight Glow Element */
+.card-glass-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle 220px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(56, 189, 248, 0.12), transparent 80%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.bento-card:hover .card-glass-glow,
+.action-bento-panel:hover .card-glass-glow,
+.viewport-dock:hover .card-glass-glow {
+  opacity: 1;
+}
+
+.card-meta-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  z-index: 2;
 }
 
-.card-modality-pill {
+.tag-chip {
   font-family: var(--font-mono);
   font-size: 0.62rem;
   font-weight: 700;
@@ -410,91 +462,93 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   border-radius: 4px;
 }
 
-.pill-cyan { background: var(--color-accent-light); color: var(--color-accent); }
-.pill-emerald { background: var(--color-accent-emerald-light); color: var(--color-accent-emerald); }
-.pill-purple { background: var(--color-accent-purple-light); color: var(--color-accent-purple); }
-.pill-gold { background: var(--color-accent-gold-light); color: var(--color-accent-gold); }
+.chip-cyan { background: var(--color-accent-light); color: var(--color-accent); }
+.chip-emerald { background: var(--color-accent-emerald-light); color: var(--color-accent-emerald); }
+.chip-purple { background: var(--color-accent-purple-light); color: var(--color-accent-purple); }
+.chip-gold { background: var(--color-accent-gold-light); color: var(--color-accent-gold); }
 
-.card-affinity-metric {
+.tag-metric {
   font-family: var(--font-mono);
   font-size: 0.68rem;
   color: var(--color-ink-muted);
 }
 
-.card-drug-name {
+.card-title {
   font-size: 0.92rem;
   font-weight: 700;
   color: #ffffff;
+  position: relative;
+  z-index: 2;
 }
 
-.card-target-desc {
+.card-desc {
   font-size: 0.74rem;
   color: var(--color-ink-secondary);
   line-height: 1.4;
+  position: relative;
+  z-index: 2;
 }
 
-.drug-card:hover {
+.bento-card:hover {
   transform: translateY(-2px);
   border-color: rgba(56, 189, 248, 0.3);
-  background: var(--color-card-hover);
 }
 
-.drug-card.active {
+.bento-card.active {
   border-color: var(--color-accent);
-  background: var(--color-card-hover);
   box-shadow: 0 0 0 1px var(--color-accent), 0 12px 30px rgba(56, 189, 248, 0.15);
 }
 
-/* Single Precision Telemetry Ribbon */
-.telemetry-ribbon {
+/* Shadcn Telemetry Bar */
+.telemetry-bar {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
   background: var(--color-card);
   backdrop-filter: blur(20px);
-  border: 1px solid var(--rule-subtle);
+  border: 1px solid var(--color-card-border);
   border-radius: 8px;
   padding: var(--space-2xs) var(--space-sm);
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-bento);
 }
 
-.telem-block {
+.telem-item {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.telem-label {
+.telem-lbl {
   font-family: var(--font-mono);
   font-size: 0.58rem;
   color: var(--color-ink-muted);
   letter-spacing: 0.06em;
 }
 
-.telem-value {
+.telem-val {
   font-family: var(--font-mono);
   font-size: 0.84rem;
   font-weight: 700;
   color: #ffffff;
 }
 
-.telem-status-text {
+.telem-status {
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 700;
   color: var(--color-accent-emerald);
 }
 
-.telem-divider {
+.telem-sep {
   width: 1px;
   height: 22px;
-  background: var(--rule-subtle);
+  background: var(--color-card-border);
 }
 
 .text-cyan { color: var(--color-accent); }
 .text-emerald { color: var(--color-accent-emerald); }
 
-/* Right Sidebar: Action Panel */
+/* Right Sidebar Bento Panels */
 .hero-sidebar {
   display: flex;
   flex-direction: column;
@@ -505,49 +559,55 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   z-index: 20;
 }
 
-.action-panel {
+.action-bento-panel {
+  position: relative;
   background: var(--color-card);
   backdrop-filter: blur(24px);
-  border: 1px solid var(--rule-subtle);
+  border: 1px solid var(--color-card-border);
   border-radius: 12px;
   padding: var(--space-sm);
-  box-shadow: var(--shadow-floating);
+  box-shadow: var(--shadow-bento);
+  overflow: hidden;
 }
 
-.panel-top {
+.panel-top-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--space-2xs);
+  position: relative;
+  z-index: 2;
 }
 
-.panel-mono-label {
+.panel-kicker {
   font-family: var(--font-mono);
   font-size: 0.62rem;
   letter-spacing: 0.08em;
   color: var(--color-ink-muted);
 }
 
-.panel-gc-stat {
+.panel-gc-metric {
   font-family: var(--font-mono);
   font-size: 0.72rem;
   color: var(--color-ink-secondary);
 }
 
-.panel-gc-stat strong { color: #ffffff; }
+.panel-gc-metric strong { color: #ffffff; }
 
 .codons-strip {
   display: flex;
   gap: var(--space-3xs);
   overflow-x: auto;
   padding: var(--space-3xs) 0 var(--space-xs);
+  position: relative;
+  z-index: 2;
 }
 
 .codon-pill {
   width: 36px;
   height: 52px;
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--rule-subtle);
+  border: 1px solid var(--color-card-border);
   border-radius: 6px;
   display: flex;
   flex-direction: column;
@@ -582,17 +642,19 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
 .base-g { color: var(--color-accent-emerald); border-bottom: 2px solid var(--color-accent-emerald); }
 .base-c { color: var(--color-accent-gold); border-bottom: 2px solid var(--color-accent-gold); }
 
-.panel-action-cluster {
+.panel-button-stack {
   display: flex;
   flex-direction: column;
   gap: var(--space-2xs);
   margin-top: var(--space-2xs);
+  position: relative;
+  z-index: 2;
 }
 
 .btn-dock-action {
   width: 100%;
   background: var(--color-accent);
-  color: #0d1117;
+  color: #0c1017;
   font-family: var(--font-sans);
   font-size: 0.82rem;
   font-weight: 700;
@@ -610,7 +672,7 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
 .btn-ghost-action {
   width: 100%;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--rule-subtle);
+  border: 1px solid var(--color-card-border);
   color: var(--color-ink-secondary);
   font-family: var(--font-mono);
   font-size: 0.7rem;
@@ -625,31 +687,37 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   color: #ffffff;
 }
 
-.viewport-controls-dock {
+.viewport-dock {
+  position: relative;
   background: var(--color-card);
   backdrop-filter: blur(20px);
-  border: 1px solid var(--rule-subtle);
+  border: 1px solid var(--color-card-border);
   border-radius: 8px;
   padding: var(--space-2xs) var(--space-sm);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-bento);
+  overflow: hidden;
 }
 
-.vp-hint-text {
+.vp-hint {
   font-size: 0.72rem;
   color: var(--color-ink-secondary);
+  position: relative;
+  z-index: 2;
 }
 
-.vp-button-group {
+.vp-actions {
   display: flex;
   gap: var(--space-3xs);
+  position: relative;
+  z-index: 2;
 }
 
-.btn-dock-mini {
+.btn-mini-pill {
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--rule-subtle);
+  border: 1px solid var(--color-card-border);
   color: var(--color-ink-secondary);
   font-family: var(--font-mono);
   font-size: 0.65rem;
@@ -659,19 +727,19 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-.btn-dock-mini:hover {
+.btn-mini-pill:hover {
   color: #ffffff;
   border-color: #ffffff;
 }
 
 /* ==========================================================================
-   PIPELINE SECTION
+   PIPELINE BENTO TABLE
    ========================================================================== */
 
 .section-pipeline {
   padding: var(--space-3xl) var(--space-md);
   background: var(--color-surface);
-  border-top: 1px solid var(--rule-subtle);
+  border-top: 1px solid var(--color-card-border);
 }
 
 .section-container {
@@ -679,12 +747,12 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   margin: 0 auto;
 }
 
-.section-header-block {
+.section-head-block {
   max-width: 680px;
   margin-bottom: var(--space-xl);
 }
 
-.sec-eyebrow {
+.sec-kicker {
   font-family: var(--font-mono);
   font-size: 0.72rem;
   color: var(--color-accent);
@@ -707,28 +775,28 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   max-width: 62ch;
 }
 
-.pipeline-specimen-table {
+.pipeline-bento-table {
   background: var(--color-card);
-  border: 1px solid var(--rule-subtle);
+  border: 1px solid var(--color-card-border);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-bento);
 }
 
-.pipe-row {
+.bento-row {
   display: grid;
   grid-template-columns: 120px 2fr 1.5fr 160px 180px;
   align-items: center;
   padding: var(--space-sm) var(--space-md);
-  border-bottom: 1px solid var(--rule-subtle);
+  border-bottom: 1px solid var(--color-card-border);
   font-size: 0.88rem;
 }
 
-.pipe-row:last-child {
+.bento-row:last-child {
   border-bottom: none;
 }
 
-.pipe-head-row {
+.bento-head {
   background: rgba(255, 255, 255, 0.02);
   font-family: var(--font-mono);
   font-size: 0.68rem;
@@ -758,7 +826,7 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   font-size: 0.84rem;
 }
 
-.stage-chip {
+.badge {
   font-family: var(--font-mono);
   font-size: 0.68rem;
   padding: 3px 8px;
@@ -775,7 +843,7 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
    ========================================================================== */
 
 .footer {
-  border-top: 1px solid var(--rule-subtle);
+  border-top: 1px solid var(--color-card-border);
   background: #080a0e;
   padding: var(--space-2xl) var(--space-md) var(--space-md);
 }
@@ -837,7 +905,7 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   max-width: 1520px;
   margin: 0 auto;
   padding-top: var(--space-md);
-  border-top: 1px solid var(--rule-subtle);
+  border-top: 1px solid var(--color-card-border);
   text-align: center;
   font-family: var(--font-mono);
   font-size: 0.65rem;
@@ -845,7 +913,7 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
 }
 
 /* ==========================================================================
-   MODAL
+   SHADCN DIALOG MODAL
    ========================================================================== */
 
 .modal-backdrop {
@@ -871,10 +939,10 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   width: 90%;
   max-width: 500px;
   background: var(--color-surface);
-  border: 1px solid var(--rule-accent);
+  border: 1px solid rgba(56, 189, 248, 0.35);
   border-radius: 12px;
   padding: var(--space-md);
-  box-shadow: var(--shadow-floating);
+  box-shadow: var(--shadow-bento);
 }
 
 .modal-header {
@@ -933,7 +1001,7 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
 .form-group input, .form-group select {
   width: 100%;
   background: rgba(0, 0, 0, 0.45);
-  border: 1px solid var(--rule-subtle);
+  border: 1px solid var(--color-card-border);
   border-radius: 6px;
   padding: var(--space-2xs) var(--space-xs);
   color: #ffffff;
@@ -950,7 +1018,7 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
 .btn-submit {
   width: 100%;
   background: var(--color-accent);
-  color: #0d1117;
+  color: #0c1017;
   font-family: var(--font-sans);
   font-size: 0.88rem;
   font-weight: 700;
@@ -979,7 +1047,7 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
     margin-left: 0;
     max-width: 100%;
   }
-  .pipeline-specimen-table .pipe-row {
+  .pipeline-bento-table .bento-row {
     grid-template-columns: 100px 1.5fr 1fr;
   }
   .col-stage, .col-status {
@@ -988,10 +1056,10 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
 }
 
 @media (max-width: 768px) {
-  .center-apparatus-badge, #sound-btn {
+  .shimmer-pill-badge, #sound-btn {
     display: none;
   }
-  .drug-grid {
+  .bento-grid {
     grid-template-columns: 1fr;
   }
   .footer-container {

@@ -1,6 +1,6 @@
 /**
- * ENUMERA // RAW REALISTIC 3D DNA DOUBLE HELIX & MOLECULAR PHARMACOLOGY ENGINE
- * Full 360° Free Mouse Orbit • Physical Subsurface Ribbons & Ball-and-Stick Atomic Rungs
+ * ENUMERA // ACETERNITY + SHADCN + REACT BITS 3D PHARMACOLOGY ENGINE
+ * Full 360° Free Mouse Orbit • Dynamic Spotlight Physics • Raw Anatomical DNA PBR Model
  */
 
 let scene, camera, renderer, controls;
@@ -31,21 +31,21 @@ const DRUG_DATA = {
     energy: '-14.2 kcal/mol',
     kd: 'Kd = 1.4 nM',
     res: 't1/2 = 4.8 hr',
-    status: 'BOUND (CFTR Exon 10)',
+    status: 'BOUND (CFTR EXON 10)',
     color: 0x38bdf8
   },
   nusinersen: {
     energy: '-16.8 kcal/mol',
     kd: 'Kd = 0.8 nM',
     res: 't1/2 = 135 days',
-    status: 'BOUND (SMN2 Exon 7)',
+    status: 'BOUND (SMN2 EXON 7)',
     color: 0x10b981
   },
   casgevy: {
     energy: '-19.4 kcal/mol',
     kd: '99.98% Fidelity',
     res: 'Permanent Edit',
-    status: 'BOUND (BCL11A Enhancer)',
+    status: 'BOUND (BCL11A ENHANCER)',
     color: 0xc084fc
   },
   patisiran: {
@@ -64,7 +64,7 @@ let mouseX = 0, mouseY = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
   initEngine();
-  initCursor();
+  initCursorAndSpotlight();
   renderCodonStrip();
   animate();
 
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function initEngine() {
   const container = document.getElementById('webgl-stage');
   scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x0e1117, 0.035);
+  scene.fog = new THREE.FogExp2(0x0c1017, 0.035);
 
   camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.set(0, 0.3, 8.8);
@@ -159,7 +159,7 @@ function buildRawRealisticDNA() {
     const base2 = (base1 === 'A') ? 'T' : (base1 === 'T') ? 'A' : (base1 === 'G') ? 'C' : 'G';
     const pMid = new THREE.Vector3((x1 + x2) / 2, y, (z1 + z2) / 2);
 
-    // Half Rung 1 (Cylinder + End Atom)
+    // Half Rung 1
     const rMat1 = new THREE.MeshPhysicalMaterial({
       color: BASE_COLORS[base1],
       roughness: 0.22,
@@ -299,21 +299,57 @@ function onResize() {
 function onMouseMove(e) {
   mouseX = (e.clientX / window.innerWidth) * 2 - 1;
   mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+
+  document.documentElement.style.setProperty('--mouse-screen-x', `${e.clientX}px`);
+  document.documentElement.style.setProperty('--mouse-screen-y', `${e.clientY}px`);
+}
+
+/* ==========================================================================
+   ACETERNITY SPOTLIGHT & CURSOR SYSTEM
+   ========================================================================== */
+
+function initCursorAndSpotlight() {
+  const dot = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  let cx = 0, cy = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    cx = e.clientX;
+    cy = e.clientY;
+    if (dot) dot.style.transform = `translate(${cx}px, ${cy}px)`;
+
+    // Aceternity Spotlight position tracking per card
+    document.querySelectorAll('.spotlight-card').forEach(card => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    });
+  });
+
+  function updateRing() {
+    rx += (cx - rx) * 0.15;
+    ry += (cy - ry) * 0.15;
+    if (ring) ring.style.transform = `translate(${rx}px, ${ry}px)`;
+    requestAnimationFrame(updateRing);
+  }
+  updateRing();
 }
 
 /* ==========================================================================
    DRUG SELECTION & DOCKING ANIMATION
    ========================================================================== */
 
-function selectTherapeutic(key) {
+function selectTherapeutic(key, cardElem) {
   currentDrugKey = key;
   const d = DRUG_DATA[key];
   if (!d) return;
 
   playAcousticTone(580, 0.1);
 
-  document.querySelectorAll('.drug-card').forEach(c => c.classList.remove('active'));
-  event.currentTarget.classList.add('active');
+  document.querySelectorAll('.bento-card').forEach(c => c.classList.remove('active'));
+  if (cardElem) cardElem.classList.add('active');
 
   // Update Telemetry Bar
   document.getElementById('telem-energy').textContent = d.energy;
@@ -447,26 +483,6 @@ function playAcousticTone(freq, dur) {
 function toggleAudio() {
   isAudioActive = !isAudioActive;
   document.getElementById('sound-label').textContent = isAudioActive ? 'AUDIO: ON' : 'AUDIO: OFF';
-}
-
-function initCursor() {
-  const dot = document.getElementById('cursor-dot');
-  const ring = document.getElementById('cursor-ring');
-  let cx = 0, cy = 0, rx = 0, ry = 0;
-
-  document.addEventListener('mousemove', e => {
-    cx = e.clientX;
-    cy = e.clientY;
-    if (dot) dot.style.transform = `translate(${cx}px, ${cy}px)`;
-  });
-
-  function updateRing() {
-    rx += (cx - rx) * 0.15;
-    ry += (cy - ry) * 0.15;
-    if (ring) ring.style.transform = `translate(${rx}px, ${ry}px)`;
-    requestAnimationFrame(updateRing);
-  }
-  updateRing();
 }
 
 function openAccessModal() {
