@@ -1,5 +1,5 @@
 /**
- * ENUMERA // 48,000 GPU PARTICLE QUANTUM DNA & MOLECULAR LIGAND DOCKING ENGINE
+ * ENUMERA // 60,000 GPU PARTICLE QUANTUM DNA NEBULA & DRUG KINETICS ENGINE
  * Custom GLSL ShaderMaterial • Simplex 3D Curl Noise • Real-Time Pharmacogenomics
  */
 
@@ -12,59 +12,37 @@ let clock = new THREE.Clock();
 // Master 3D Objects
 let dnaParticleMesh, dnaShaderMaterial;
 let drugLigandGroup;
-let particleCount = 48000;
+let particleCount = 60000;
 
-// Active Sequence State
-const BASES = ['A', 'T', 'G', 'C'];
-let activeSequence = [
-  'A', 'T', 'G', 'C', 'C', 'G', 'T', 'A', 'A', 'T', 'C', 'G', 'T', 'A', 'G', 'C', 'A', 'T', 'G', 'C', 'G', 'C', 'A', 'T'
-];
-
-// Active Drug Data
+// Drug Formulation Metadata
 const DRUG_DATA = {
   trikafta: {
-    title: 'Elexacaftor-01 (100mg Solid Oral Tablet)',
-    desc: 'Direct-acting small molecule oral corrector that binds to the nucleotide-binding domain (NBD1) of mutant CFTR protein, restoring chloride ion transport across epithelial cell membranes.',
+    energy: '-14.2 kcal/mol',
     kd: 'Kd = 1.4 nM',
-    energy: '-14.2',
     res: 't1/2 = 4.8 hr',
-    bio: '84.6% Oral',
-    pk: 'LogP = 3.2',
-    cl: 'Hepatic CYP3A4',
-    color: 0x00f0ff
+    status: 'BOUND (CFTR Exon 10)',
+    color: 0x38bdf8
   },
   nusinersen: {
-    title: 'Nusinersen-X (Splice-Switching Oligonucleotide)',
-    desc: 'Synthetic 2\'-O-methoxyethyl phosphorothioate antisense oligonucleotide designed to hybridize to pre-mRNA and promote full-length SMN protein translation.',
+    energy: '-16.8 kcal/mol',
     kd: 'Kd = 0.8 nM',
-    energy: '-16.8',
     res: 't1/2 = 135 days',
-    bio: 'Intrathecal / IV',
-    pk: 'Hydrophilic',
-    cl: 'Renal Excretion',
-    color: 0x00e676
+    status: 'BOUND (SMN2 Exon 7)',
+    color: 0x34d399
   },
   casgevy: {
-    title: 'Exa-cel Prime (CRISPR BCL11A Editor)',
-    desc: 'Precision prime editing ribonucleoprotein complex targeting the erythroid-specific enhancer of BCL11A to reactivate fetal hemoglobin synthesis.',
+    energy: '-19.4 kcal/mol',
     kd: '99.98% Fidelity',
-    energy: '-19.4',
     res: 'Permanent Edit',
-    bio: 'Lipid Nanoparticle',
-    pk: 'Nanoscale 85nm',
-    cl: 'Macrophage System',
-    color: 0xa855f7
+    status: 'BOUND (BCL11A Enhancer)',
+    color: 0xc084fc
   },
   patisiran: {
-    title: 'Patisiran-RNAi (Lipid Nanocarrier Formulation)',
-    desc: 'Small interfering RNA (siRNA) encapsulated in lipid nanoparticles formulated for targeted hepatocyte receptor-mediated endocytosis.',
+    energy: '-12.6 kcal/mol',
     kd: 't1/2 = 4.8 hr',
-    energy: '-12.6',
     res: 't1/2 = 9.2 days',
-    bio: '78.2% Infusion',
-    pk: 'LogP = 2.8',
-    cl: 'Reticuloendothelial',
-    color: 0xffd600
+    status: 'BOUND (TTR 3\' UTR)',
+    color: 0xfbbf24
   }
 };
 
@@ -74,12 +52,8 @@ let currentDrugKey = 'trikafta';
 let mouseX = 0, mouseY = 0;
 let targetCamX = 0, targetCamY = 0;
 
-// Telemetry Canvas
-let waveCanvas, waveCtx;
-let waveX = 0, lastWaveY = 40;
-
 /* ==========================================================================
-   GLSL SHADERS FOR 48,000 MOLECULAR BIOPHOTON PARTICLES
+   GLSL SHADERS (60,000 GPU PARTICLES)
    ========================================================================== */
 
 const vertexShader = `
@@ -147,36 +121,36 @@ const vertexShader = `
   }
 
   void main() {
-    float t = uTime * 0.5 + aPhase;
+    float t = uTime * 0.4 + aPhase;
 
-    // Organic Helical Curl Undulation
+    // Organic Curl Undulation
     vec3 noiseVec = vec3(
-      snoise(position * 0.6 + vec3(t * 0.25, 0.0, 0.0)),
-      snoise(position * 0.6 + vec3(0.0, t * 0.25, 0.0)),
-      snoise(position * 0.6 + vec3(0.0, 0.0, t * 0.25))
+      snoise(position * 0.5 + vec3(t * 0.2, 0.0, 0.0)),
+      snoise(position * 0.5 + vec3(0.0, t * 0.2, 0.0)),
+      snoise(position * 0.5 + vec3(0.0, 0.0, t * 0.2))
     );
 
-    vec3 finalPos = position + noiseVec * (0.12 * uTurbulence);
+    vec3 finalPos = position + noiseVec * (0.15 * uTurbulence);
 
-    // Ligand Docking Particle Excitation
+    // Ligand Docking Particle Ripple
     if (uDockSurge > 0.01) {
-      float ripple = sin(length(finalPos.xz) * 6.0 - uTime * 10.0);
-      finalPos += normalize(finalPos) * ripple * (uDockSurge * 0.35);
+      float ripple = sin(length(finalPos.xz) * 5.0 - uTime * 8.0);
+      finalPos += normalize(finalPos) * ripple * (uDockSurge * 0.3);
     }
 
     vec4 mvPosition = modelViewMatrix * vec4(finalPos, 1.0);
     gl_Position = projectionMatrix * mvPosition;
 
-    // Size Attenuation with Camera Distance
-    float pSize = (16.0 / -mvPosition.z) * (1.0 + uDockSurge * 0.5);
-    gl_PointSize = clamp(pSize, 1.5, 42.0);
+    // Depth-of-Field Size Attenuation
+    float pSize = (18.0 / -mvPosition.z) * (1.0 + uDockSurge * 0.6);
+    gl_PointSize = clamp(pSize, 1.5, 45.0);
 
     vColor = aBaseColor;
     if (uDockSurge > 0.01) {
       vColor = mix(vColor, vec3(1.0, 1.0, 1.0), uDockSurge * 0.7);
     }
 
-    vAlpha = clamp(1.3 / (-mvPosition.z * 0.16), 0.25, 0.95);
+    vAlpha = clamp(1.4 / (-mvPosition.z * 0.15), 0.25, 0.95);
   }
 `;
 
@@ -185,26 +159,24 @@ const fragmentShader = `
   varying float vAlpha;
 
   void main() {
-    // Soft circular biophoton particle falloff
+    // Exponential anti-aliased biophoton particle falloff
     vec2 coord = gl_PointCoord - vec2(0.5);
     float dist = length(coord);
 
     if (dist > 0.5) discard;
 
-    float intensity = exp(-dist * 5.0);
+    float intensity = exp(-dist * 5.2);
     gl_FragColor = vec4(vColor, vAlpha * intensity);
   }
 `;
 
 /* ==========================================================================
-   INITIALIZE THREE.JS
+   INITIALIZE ENGINE
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
   initEngine();
   initCursor();
-  initWaveformCanvas();
-  renderCodonStrip();
   animate();
 
   window.addEventListener('resize', onResize);
@@ -212,12 +184,12 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initEngine() {
-  const container = document.getElementById('canvas-stage');
+  const container = document.getElementById('webgl-canvas');
   scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x05070c, 0.032);
+  scene.fog = new THREE.FogExp2(0x08090d, 0.03);
 
-  camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.set(0, 0.25, 8.6);
+  camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.set(0, 0.2, 8.8);
 
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -235,13 +207,13 @@ function initEngine() {
     controls.enablePan = false;
   }
 
-  // Build GPU Particle DNA Structure
+  // Build GPU Particle DNA Helix
   buildParticleDNAHelix();
   build3DDrugLigand();
 }
 
 /* ==========================================================================
-   48,000 GPU PARTICLE QUANTUM DNA DOUBLE HELIX
+   60,000 GPU PARTICLE QUANTUM DNA HELIX
    ========================================================================== */
 
 function buildParticleDNAHelix() {
@@ -253,8 +225,8 @@ function buildParticleDNAHelix() {
   const phases = new Float32Array(particleCount);
 
   const turns = 3.2;
-  const radius = 1.35;
-  const height = 10.5;
+  const radius = 1.4;
+  const height = 11.0;
 
   for (let i = 0; i < particleCount; i++) {
     const t = i / particleCount;
@@ -262,9 +234,9 @@ function buildParticleDNAHelix() {
     const angle = t * Math.PI * 2 * turns;
 
     let x, z;
-    let c = new THREE.Color(0x00f0ff);
+    let c = new THREE.Color(0x38bdf8);
 
-    // 70% of particles form the dual helical strands
+    // 70% of particles form the dual intertwined helical strands
     if (i < particleCount * 0.7) {
       const strand = (i % 2 === 0) ? 0 : Math.PI;
       const strandRad = radius + (Math.random() - 0.5) * 0.18;
@@ -272,10 +244,10 @@ function buildParticleDNAHelix() {
       x = Math.cos(angle + strand) * strandRad;
       z = Math.sin(angle + strand) * strandRad;
 
-      if (strand === 0) c = new THREE.Color(0x00f0ff); // Strand 1: Spectral Cyan
-      else c = new THREE.Color(0x00e676);              // Strand 2: Emerald
+      if (strand === 0) c = new THREE.Color(0x38bdf8); // Strand 1: Spectral Cyan
+      else c = new THREE.Color(0x34d399);              // Strand 2: Emerald
     }
-    // 20% form the bridging nucleotide rungs (A, T, G, C)
+    // 20% form bridging nucleotide base pairs
     else if (i < particleCount * 0.9) {
       const interp = Math.random();
       const rad1 = Math.cos(angle) * radius;
@@ -286,21 +258,19 @@ function buildParticleDNAHelix() {
       x = rad1 * interp + rad2 * (1.0 - interp);
       z = zrad1 * interp + zrad2 * (1.0 - interp);
 
-      const baseMod = Math.floor(t * activeSequence.length) % activeSequence.length;
-      const base = activeSequence[baseMod];
-
-      if (base === 'A') c = new THREE.Color(0x00f0ff);
-      else if (base === 'T') c = new THREE.Color(0xff2d55);
-      else if (base === 'G') c = new THREE.Color(0x00e676);
-      else c = new THREE.Color(0xffd600);
+      const r = Math.random();
+      if (r < 0.25) c = new THREE.Color(0x38bdf8);
+      else if (r < 0.5) c = new THREE.Color(0xf43f5e);
+      else if (r < 0.75) c = new THREE.Color(0x34d399);
+      else c = new THREE.Color(0xfbbf24);
     }
-    // 10% form ambient hydration solvent cloud
+    // 10% form ambient solvent hydration cloud
     else {
       const solAngle = Math.random() * Math.PI * 2;
-      const solR = radius + 0.4 + Math.random() * 1.2;
+      const solR = radius + 0.4 + Math.random() * 1.4;
       x = Math.cos(solAngle) * solR;
       z = Math.sin(solAngle) * solR;
-      c = new THREE.Color(0xa855f7);
+      c = new THREE.Color(0xc084fc);
     }
 
     pos[i * 3] = x;
@@ -333,22 +303,21 @@ function buildParticleDNAHelix() {
   });
 
   dnaParticleMesh = new THREE.Points(geo, dnaShaderMaterial);
-  dnaParticleMesh.position.set(1.4, 0, 0); // Positioned for editorial balance
+  dnaParticleMesh.position.set(1.5, 0, 0); // Positioned for editorial balance
   scene.add(dnaParticleMesh);
 }
 
 /* ==========================================================================
-   3D MOLECULAR DRUG TABLET LIGAND
+   3D MOLECULAR DRUG LIGAND
    ========================================================================== */
 
 function build3DDrugLigand() {
   drugLigandGroup = new THREE.Group();
 
-  // Central polyhedral small molecule core
-  const coreGeo = new THREE.IcosahedronGeometry(0.38, 2);
+  const coreGeo = new THREE.IcosahedronGeometry(0.36, 2);
   const coreMat = new THREE.MeshPhysicalMaterial({
-    color: 0x00f0ff,
-    emissive: 0x00808c,
+    color: 0x38bdf8,
+    emissive: 0x0369a1,
     emissiveIntensity: 1.2,
     metalness: 0.5,
     roughness: 0.15,
@@ -358,16 +327,15 @@ function build3DDrugLigand() {
   const core = new THREE.Mesh(coreGeo, coreMat);
   drugLigandGroup.add(core);
 
-  // Pharmacophore atomic sphere clusters
   const atomMat = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.8, roughness: 0.1 });
   const offsets = [
-    new THREE.Vector3(0.4, 0.2, 0.0),
-    new THREE.Vector3(-0.4, -0.2, 0.0),
-    new THREE.Vector3(0.0, 0.4, 0.3),
-    new THREE.Vector3(0.0, -0.4, -0.3)
+    new THREE.Vector3(0.38, 0.2, 0.0),
+    new THREE.Vector3(-0.38, -0.2, 0.0),
+    new THREE.Vector3(0.0, 0.38, 0.28),
+    new THREE.Vector3(0.0, -0.38, -0.28)
   ];
   offsets.forEach(pt => {
-    const s = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 16), atomMat);
+    const s = new THREE.Mesh(new THREE.SphereGeometry(0.075, 16, 16), atomMat);
     s.position.copy(pt);
     drugLigandGroup.add(s);
   });
@@ -389,8 +357,7 @@ function animate() {
 
   if (dnaShaderMaterial) {
     dnaShaderMaterial.uniforms.uTime.value = time;
-    
-    // Smooth decay of dock surge excitation
+
     const surge = dnaShaderMaterial.uniforms.uDockSurge.value;
     if (surge > 0.001) {
       dnaShaderMaterial.uniforms.uDockSurge.value = THREE.MathUtils.lerp(surge, 0.0, 0.05);
@@ -401,11 +368,11 @@ function animate() {
     dnaParticleMesh.rotation.y += delta * 0.25;
   }
 
-  // Camera Parallax Lerp
+  // Smooth Camera Parallax Lerp
   targetCamX = mouseX * 0.35;
   targetCamY = mouseY * 0.35;
   if (dnaParticleMesh) {
-    dnaParticleMesh.rotation.x = THREE.MathUtils.lerp(dnaParticleMesh.rotation.x, targetCamY * 0.2, 0.05);
+    dnaParticleMesh.rotation.x = THREE.MathUtils.lerp(dnaParticleMesh.rotation.x, targetCamY * 0.18, 0.05);
     dnaParticleMesh.rotation.z = THREE.MathUtils.lerp(dnaParticleMesh.rotation.z, targetCamX * 0.15, 0.05);
   }
 
@@ -425,29 +392,24 @@ function onMouseMove(e) {
 }
 
 /* ==========================================================================
-   DRUG TABLET SELECTION & DOCKING
+   DRUG SELECTION & DOCKING
    ========================================================================== */
 
-function dockTherapeutic(key) {
+function selectTherapeutic(key) {
   currentDrugKey = key;
   const d = DRUG_DATA[key];
   if (!d) return;
 
   playAcousticTone(580, 0.1);
 
-  document.querySelectorAll('.shelf-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tray-card').forEach(c => c.classList.remove('active'));
   event.currentTarget.classList.add('active');
 
-  // Update UI Elements
-  document.getElementById('energy-stat').innerHTML = `${d.energy} <span class="unit-text">kcal/mol</span>`;
-  document.getElementById('kd-display').textContent = d.kd;
-  document.getElementById('res-display').textContent = d.res;
-
-  document.getElementById('drug-title').textContent = d.title;
-  document.getElementById('drug-desc').textContent = d.desc;
-  document.getElementById('spec-bio').textContent = d.bio;
-  document.getElementById('spec-pk').textContent = d.pk;
-  document.getElementById('spec-cl').textContent = d.cl;
+  // Update Telemetry Bar
+  document.getElementById('telem-energy').textContent = d.energy;
+  document.getElementById('telem-kd').textContent = d.kd;
+  document.getElementById('telem-res').textContent = d.res;
+  document.getElementById('telem-status').textContent = d.status;
 
   triggerDockingAnimation();
 }
@@ -459,8 +421,8 @@ function triggerDockingAnimation() {
   drugLigandGroup.visible = true;
   dnaShaderMaterial.uniforms.uDockSurge.value = 1.0;
 
-  document.getElementById('dock-badge').textContent = 'DOCKING IN PROGRESS...';
-  document.getElementById('dock-badge').style.color = '#ffd600';
+  document.getElementById('telem-status').textContent = 'DOCKING IN PROGRESS...';
+  document.getElementById('telem-status').style.color = '#fbbf24';
 
   let t = 0;
   const interval = setInterval(() => {
@@ -471,121 +433,11 @@ function triggerDockingAnimation() {
 
     if (t >= 1) {
       clearInterval(interval);
-      document.getElementById('dock-badge').textContent = 'BOUND (Kd = 1.4 nM)';
-      document.getElementById('dock-badge').style.color = '#00e676';
+      document.getElementById('telem-status').textContent = DRUG_DATA[currentDrugKey].status;
+      document.getElementById('telem-status').style.color = '#34d399';
       playAcousticTone(1040, 0.25);
     }
   }, 25);
-}
-
-/* ==========================================================================
-   SEQUENCE TRACK & CODONS
-   ========================================================================== */
-
-function renderCodonStrip() {
-  const strip = document.getElementById('codons-strip');
-  if (!strip) return;
-  strip.innerHTML = '';
-
-  let gcCount = 0;
-  activeSequence.forEach((base, idx) => {
-    if (base === 'G' || base === 'C') gcCount++;
-
-    const pill = document.createElement('div');
-    pill.className = `codon-pill c-${base.toLowerCase()}`;
-    pill.innerHTML = `
-      <span class="codon-pos">${idx + 1}</span>
-      <span class="codon-base">${base}</span>
-    `;
-    pill.title = `Codon Pos ${idx + 1}: ${base} (Click to toggle)`;
-    pill.onclick = () => cycleBase(idx);
-    strip.appendChild(pill);
-  });
-
-  const gcPct = ((gcCount / activeSequence.length) * 100).toFixed(1);
-  const gcElem = document.getElementById('gc-val');
-  if (gcElem) gcElem.textContent = `${gcPct}%`;
-}
-
-function cycleBase(idx) {
-  const cur = activeSequence[idx];
-  const next = BASES[(BASES.indexOf(cur) + 1) % BASES.length];
-  activeSequence[idx] = next;
-
-  playAcousticTone(520 + idx * 15, 0.05);
-  renderCodonStrip();
-  buildParticleDNAHelix();
-}
-
-function injectMutation() {
-  playAcousticTone(340, 0.15);
-  activeSequence[8] = 'T';
-  activeSequence[9] = 'A';
-  renderCodonStrip();
-  buildParticleDNAHelix();
-
-  document.getElementById('dock-badge').textContent = 'PATHOGENIC VARIANT DETECTED';
-  document.getElementById('dock-badge').style.color = '#ff2d55';
-  document.getElementById('energy-stat').innerHTML = '-8.4 <span class="unit-text">kcal/mol</span>';
-}
-
-function restoreWildtype() {
-  playAcousticTone(640, 0.1);
-  activeSequence = ['A', 'T', 'G', 'C', 'C', 'G', 'T', 'A', 'A', 'T', 'C', 'G', 'T', 'A', 'G', 'C', 'A', 'T', 'G', 'C', 'G', 'C', 'A', 'T'];
-  renderCodonStrip();
-  buildParticleDNAHelix();
-
-  document.getElementById('dock-badge').textContent = 'WILDTYPE RESTING';
-  document.getElementById('dock-badge').style.color = '#00e676';
-  document.getElementById('energy-stat').innerHTML = '-14.2 <span class="unit-text">kcal/mol</span>';
-}
-
-function toggleAutoOrbit() {
-  autoOrbit = !autoOrbit;
-  document.getElementById('orbit-btn').textContent = autoOrbit ? 'Pause Orbit' : 'Resume Orbit';
-}
-
-function resetPerspective() {
-  camera.position.set(0, 0.25, 8.6);
-  if (controls) controls.target.set(0, 0, 0);
-  if (dnaParticleMesh) dnaParticleMesh.rotation.set(0, 0, 0);
-}
-
-/* ==========================================================================
-   2D BINDING KINETICS WAVEFORM CANVAS
-   ========================================================================== */
-
-function initWaveformCanvas() {
-  waveCanvas = document.getElementById('waveform-canvas');
-  if (!waveCanvas) return;
-  waveCtx = waveCanvas.getContext('2d');
-  waveCtx.lineWidth = 1.8;
-
-  setInterval(drawWaveStep, 35);
-}
-
-function drawWaveStep() {
-  if (!waveCtx) return;
-  const w = waveCanvas.width;
-  const h = waveCanvas.height;
-  const midY = h / 2;
-
-  waveCtx.clearRect(waveX, 0, 8, h);
-
-  const t = Date.now() / 1000;
-  const y = midY + Math.sin(t * 4.5 + waveX * 0.08) * 16 * Math.cos(waveX * 0.035);
-
-  waveCtx.strokeStyle = '#00f0ff';
-  waveCtx.shadowBlur = 6;
-  waveCtx.shadowColor = '#00f0ff';
-
-  waveCtx.beginPath();
-  waveCtx.moveTo(waveX, lastWaveY);
-  waveCtx.lineTo(waveX + 2, y);
-  waveCtx.stroke();
-
-  lastWaveY = y;
-  waveX = (waveX + 2) % w;
 }
 
 /* ==========================================================================
@@ -613,12 +465,12 @@ function playAcousticTone(freq, dur) {
 
 function toggleAudio() {
   isAudioActive = !isAudioActive;
-  document.getElementById('sound-txt').textContent = isAudioActive ? 'AUDIO: ON' : 'AUDIO: MUTED';
+  document.getElementById('sound-text').textContent = isAudioActive ? 'AUDIO: ON' : 'AUDIO: OFF';
 }
 
 function initCursor() {
   const dot = document.getElementById('cursor-dot');
-  const ring = document.getElementById('cursor-ring');
+  const circle = document.getElementById('cursor-circle');
   let cx = 0, cy = 0, rx = 0, ry = 0;
 
   document.addEventListener('mousemove', e => {
@@ -627,13 +479,13 @@ function initCursor() {
     if (dot) dot.style.transform = `translate(${cx}px, ${cy}px)`;
   });
 
-  function updateRing() {
+  function updateCircle() {
     rx += (cx - rx) * 0.15;
     ry += (cy - ry) * 0.15;
-    if (ring) ring.style.transform = `translate(${rx}px, ${ry}px)`;
-    requestAnimationFrame(updateRing);
+    if (circle) circle.style.transform = `translate(${rx}px, ${ry}px)`;
+    requestAnimationFrame(updateCircle);
   }
-  updateRing();
+  updateCircle();
 }
 
 function openPortal() {
@@ -646,6 +498,6 @@ function closePortal() {
 
 function handlePortalSubmit(e) {
   e.preventDefault();
-  alert('Clinical access inquiry received. Raw PDB/SDF coordinate keys dispatched to your institutional address.');
+  alert('Credential verification submitted. Raw PDB/SDF coordinate keys dispatched to your institutional address.');
   closePortal();
 }
