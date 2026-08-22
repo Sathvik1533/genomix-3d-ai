@@ -1,449 +1,365 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PRISM GENOMICS | Programmable Biology & Structural Genetics</title>
-  <meta name="description" content="Pioneering precision molecular therapeutics through atomic-resolution 3D structural genomics, in silico CRISPR prime editing, and quantitative connectomics.">
+  <title>AURA // Computational Hemodynamics & Biokinetic Systems</title>
+  <meta name="description" content="Next-generation biokinetic organ modeling, sub-millimeter hemodynamic simulation, and real-time volumetric organ ultrasound computation.">
   
-  <!-- Premium Fonts -->
+  <!-- Curated Display & Editorial Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@500;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
   
-  <!-- Stylesheet -->
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Three.js Core & Controls -->
+  <!-- Three.js Engine & Controls -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
 
-  <!-- Film Grain Texture Overlay -->
-  <div class="noise-overlay"></div>
+  <!-- Film Noise Shader Overlay -->
+  <div class="grain-layer"></div>
 
   <!-- 3D WebGL Canvas Layer -->
-  <div id="webgl-canvas" class="webgl-canvas-container"></div>
+  <div id="canvas-container" class="canvas-container"></div>
 
-  <!-- Custom Cursor Follower -->
-  <div id="cursor-dot" class="cursor-dot"></div>
-  <div id="cursor-ring" class="cursor-ring"></div>
+  <!-- Giant Kinetic 3D Background Typographic Backdrop -->
+  <div class="kinetic-backdrop" aria-hidden="true">
+    <div class="backdrop-line" id="backdrop-text">HEMODYNAMICS</div>
+  </div>
 
-  <!-- Foreground Interface -->
-  <div class="site-wrapper">
+  <!-- Interactive Custom Pointer -->
+  <div id="pointer-dot" class="pointer-dot"></div>
+  <div id="pointer-aura" class="pointer-aura"></div>
 
-    <!-- Global Header -->
-    <header class="site-header">
-      <div class="header-inner">
-        
-        <a href="#" class="brand-entity">
-          <span class="brand-monogram">PRISM</span>
-          <span class="brand-divider">/</span>
-          <span class="brand-sub">STRUCTURAL GENOMICS</span>
+  <!-- Global Application Shell -->
+  <div class="app-shell">
+
+    <!-- Top Navigation -->
+    <header class="masthead">
+      <div class="masthead-inner">
+        <a href="#" class="brand-link">
+          <span class="brand-emblem"></span>
+          <span class="brand-title">AURA <span class="brand-dim">/ 01</span></span>
         </a>
 
-        <nav class="header-nav">
-          <a href="#hero" class="nav-item active"><span class="nav-index">01</span> Atlas</a>
-          <a href="#workbench" class="nav-item"><span class="nav-index">02</span> Workbench</a>
-          <a href="#pipeline" class="nav-item"><span class="nav-index">03</span> Pipeline</a>
-          <a href="#publications" class="nav-item"><span class="nav-index">04</span> Research</a>
-        </nav>
-
-        <div class="header-meta">
-          <div class="telemetry-pill">
-            <span class="live-pulse"></span>
-            <span class="pill-text">CRYO-EM 1.82 Å</span>
-          </div>
-          <button class="btn-ghost-sm" onclick="toggleSound()">
-            <span id="sound-indicator">AUDIO: ON</span>
-          </button>
-          <button class="btn-solid" onclick="openModal()">
-            <span>Access Portal</span>
-          </button>
+        <div class="center-ticker">
+          <span class="ticker-live-dot"></span>
+          <span class="ticker-text">VOLUMETRIC CARDIAC FLUID DYNAMICS // 60 FPS GLSL</span>
         </div>
 
+        <div class="masthead-actions">
+          <button id="sound-btn" class="action-tag-btn" onclick="toggleAudioEngine()">
+            <span class="sound-wave-icon"><span></span><span></span><span></span></span>
+            <span id="sound-label">AUDIO: ACTIVE</span>
+          </button>
+          <button class="action-pill-btn" onclick="openContactSheet()">
+            <span>Request Clinical Access</span>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
       </div>
     </header>
 
-    <!-- Main Hero Stage -->
-    <main>
-      <section id="hero" class="hero-stage">
+    <!-- Main Viewport Hero Experience -->
+    <section class="hero-viewport">
+      
+      <!-- Left Narrative Column -->
+      <div class="narrative-column">
         
-        <!-- Top Editorial Coordinates -->
-        <div class="hero-meta-bar">
-          <div class="meta-item">
-            <span class="meta-label">ASSEMBLY</span>
-            <span class="meta-val">GRCh38.p14</span>
-          </div>
-          <div class="meta-item">
-            <span class="meta-label">TARGET LOCUS</span>
-            <span class="meta-val">Chr 7q31.2 : 117,120,014 - 117,308,718</span>
-          </div>
-          <div class="meta-item">
-            <span class="meta-label">RESOLUTION</span>
-            <span class="meta-val">1.82 &Aring; (Sub-Angstrom)</span>
-          </div>
-          <div class="meta-item">
-            <span class="meta-label">FIDELITY</span>
-            <span class="meta-val highlight-cyan">99.982%</span>
-          </div>
+        <div class="narrative-tag">
+          <span class="tag-counter">[ 01 ]</span>
+          <span class="tag-label">COMPUTATIONAL CARDIOLOGY & BIOMECHANICS</span>
         </div>
 
-        <!-- Hero Editorial Text -->
-        <div class="hero-editorial">
-          <div class="editorial-tag">
-            <span class="tag-num">01.0</span>
-            <span class="tag-title">ATOMIC SCALE GENOME ENGINEERING</span>
-          </div>
+        <h1 class="hero-statement">
+          The Geometry of <br>
+          <span class="highlight-crimson">Living Motion.</span>
+        </h1>
 
-          <h1 class="hero-title">
-            Programmable <br>
-            <span class="serif-italic">Molecular</span> Architecture
-          </h1>
+        <p class="hero-abstract">
+          High-fidelity non-linear finite element simulation of human myocardium. Real-time Navier-Stokes aortic blood flow velocity, myocardial strain deformation, and interactive volumetric ultrasound sectioning.
+        </p>
 
-          <p class="hero-lead">
-            We synthesize generative artificial intelligence with sub-angstrom structural biology to design, simulate, and validate precision gene editing vectors with verified in vivo safety profiles.
-          </p>
-
-          <!-- 3D Model Director Tabs -->
-          <div class="director-tabs">
-            <button class="director-btn active" onclick="setVisualTarget('dna')">
-              <span class="btn-dot"></span>
-              <span>DNA Double Helix</span>
+        <!-- Interactive Organ State Switcher -->
+        <div class="state-selector-deck">
+          <div class="deck-caption">EXPLORATION REGIME</div>
+          <div class="deck-buttons">
+            <button class="deck-btn active" onclick="switchOrganModel('heart')">
+              <span class="btn-indicator"></span>
+              <span class="deck-btn-title">4-Chamber Heart</span>
+              <span class="deck-btn-desc">Myocardium & Aortic Arch</span>
             </button>
-            <button class="director-btn" onclick="setVisualTarget('brain')">
-              <span class="btn-dot"></span>
-              <span>Cortical Connectome</span>
-            </button>
-            <button class="director-btn" onclick="setVisualTarget('cryo')">
-              <span class="btn-dot"></span>
-              <span>Cryo-EM Density</span>
+            <button class="deck-btn" onclick="switchOrganModel('brain')">
+              <span class="btn-indicator"></span>
+              <span class="deck-btn-title">Neural Connectome</span>
+              <span class="deck-btn-desc">Cortical Fiber Pathways</span>
             </button>
           </div>
         </div>
 
-        <!-- Floating Telemetry HUD Card (Right Anchor) -->
-        <div class="hero-hud-panel">
+        <!-- Real-Time Cardiac Cycle Phase Scrubber -->
+        <div class="scrubber-card" id="cardiac-scrubber-card">
+          <div class="scrubber-header">
+            <span class="scrubber-title">CARDIAC CYCLE TIMELINE (60 BPM)</span>
+            <span class="scrubber-phase-name" id="phase-name">VENTRICULAR EJECTION</span>
+          </div>
           
-          <div class="hud-box">
-            <div class="hud-box-header">
-              <span class="hud-tag">REAL-TIME TELEMETRY</span>
-              <span class="hud-status">SYNCHRONIZED</span>
-            </div>
-
-            <!-- Dynamic Waveform Plotter -->
-            <div class="hud-canvas-wrap">
-              <canvas id="wave-canvas" width="300" height="75"></canvas>
-            </div>
-
-            <div class="hud-data-row">
-              <div class="data-col">
-                <span class="data-lbl">BINDING ENERGY</span>
-                <span class="data-val text-cyan" id="binding-energy">-14.2 <small>kcal/mol</small></span>
-              </div>
-              <div class="data-col">
-                <span class="data-lbl">OFF-TARGET PROB</span>
-                <span class="data-val text-emerald" id="off-target">&lt; 0.0001%</span>
-              </div>
-            </div>
-
-            <div class="hud-divider"></div>
-
-            <div class="hud-action-row">
-              <button class="btn-accent-action" onclick="executeCleavageSequence()">
-                <span>Simulate Cas9 Cleavage</span>
-                <span class="btn-arrow">&rarr;</span>
-              </button>
+          <div class="scrubber-track-wrap">
+            <input type="range" id="cycle-scrubber" min="0" max="100" value="35" oninput="manualScrub(this.value)">
+            <div class="scrubber-markers">
+              <span>0% Atrial Systole</span>
+              <span>30% Systolic Peak</span>
+              <span>70% Diastolic Fill</span>
+              <span>100%</span>
             </div>
           </div>
 
-          <!-- Locus Coordinate Card -->
-          <div class="hud-sub-card">
-            <div class="sub-card-flex">
-              <div>
-                <span class="sub-lbl">TARGET EXON</span>
-                <div class="sub-val" id="exon-name">CFTR Exon 10 (&Delta;F508)</div>
-              </div>
-              <div class="sub-badge" id="locus-status">WILDTYPE MATCH</div>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Bottom 3D Viewport Controls Bar -->
-        <div class="viewport-controls-dock">
-          <div class="dock-item">
-            <span class="dock-key">ORBIT</span>
-            <span class="dock-desc">Left Click + Drag</span>
-          </div>
-          <div class="dock-divider"></div>
-          <div class="dock-item">
-            <span class="dock-key">ZOOM</span>
-            <span class="dock-desc">Scroll Wheel</span>
-          </div>
-          <div class="dock-divider"></div>
-          <div class="dock-actions">
-            <button class="dock-btn" onclick="resetViewport()" title="Reset Camera Perspective">Reset Perspective</button>
-            <button class="dock-btn" id="btn-orbit" onclick="toggleOrbit()">Pause Orbit</button>
-            <button class="dock-btn highlight" onclick="toggleLaserGrid()">Targeting Matrix</button>
+          <div class="scrubber-actions">
+            <button class="btn-mini-control" onclick="togglePulsePlay()">
+              <span id="play-state-icon">⏸</span> <span id="play-state-txt">Live Rhythm</span>
+            </button>
+            <button class="btn-mini-control" onclick="triggerArrhythmiaDemo()">
+              ⚡ Induce Tachycardia (140 BPM)
+            </button>
           </div>
         </div>
 
-      </section>
+      </div>
 
-      <!-- Section 02: Interactive Structural Workbench -->
-      <section id="workbench" class="content-section">
-        <div class="section-container">
+      <!-- Right Telemetry & Ultrasound HUD Column -->
+      <div class="telemetry-column">
+        
+        <!-- Live Ultrasound Doppler Waveform -->
+        <div class="telemetry-hud-card">
+          <div class="card-top-row">
+            <div>
+              <span class="hud-mono-tag">DOPPLER ULTRASOUND VELOCITY</span>
+              <div class="hud-main-num" id="doppler-vel">1.28 <small>m/s</small></div>
+            </div>
+            <div class="hud-status-badge">
+              <span class="badge-dot"></span>
+              <span>LAMINAR FLOW</span>
+            </div>
+          </div>
+
+          <!-- Dynamic Doppler Canvas -->
+          <div class="canvas-doppler-box">
+            <canvas id="doppler-canvas" width="320" height="90"></canvas>
+          </div>
+
+          <div class="hud-metrics-row">
+            <div class="hud-stat-cell">
+              <span class="stat-lbl">SYSTOLIC PRESSURE</span>
+              <span class="stat-val" id="systolic-val">118 <small>mmHg</small></span>
+            </div>
+            <div class="hud-stat-cell">
+              <span class="stat-lbl">EJECTION FRACTION</span>
+              <span class="stat-val highlight-cyan">68.4%</span>
+            </div>
+            <div class="hud-stat-cell">
+              <span class="stat-lbl">MYOCARDIAL STRESS</span>
+              <span class="stat-val highlight-crimson" id="stress-val">18.2 <small>kPa</small></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ultrasound Cross-Section Cutting Tool -->
+        <div class="interactive-tool-card">
+          <div class="tool-card-head">
+            <span class="hud-mono-tag">VOLUMETRIC SLICE INTERSECTOR</span>
+            <span class="tool-value-tag" id="slice-pos-val">SAGITTAL: 0.0 mm</span>
+          </div>
+          <p class="tool-desc">Drag plane to slice through aortic valve, left ventricle, and intraventricular septum.</p>
+          <input type="range" id="slice-slider" min="-2.0" max="2.0" step="0.05" value="2.0" oninput="adjustClippingPlane(this.value)">
+          <div class="tool-btn-row">
+            <button class="tool-action-btn active" id="btn-full-mesh" onclick="resetClippingPlane()">Full Organ</button>
+            <button class="tool-action-btn" onclick="setClipPreset('bicuspid')">Aortic Valve View</button>
+            <button class="tool-action-btn" onclick="setClipPreset('chamber')">4-Chamber Cross</button>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- Floating Dock Controls -->
+    <div class="dock-floating-bar">
+      <button class="dock-trigger" onclick="resetCameraAngle()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        <span>Reset Camera</span>
+      </button>
+      <div class="dock-sep"></div>
+      <button class="dock-trigger" id="orbit-toggle-btn" onclick="toggleAutoRotation()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m10 15 5-3-5-3v6z"/></svg>
+        <span id="orbit-btn-text">Pause Rotation</span>
+      </button>
+      <div class="dock-sep"></div>
+      <button class="dock-trigger highlight-dock" onclick="toggleWireframeMode()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+        <span>FEA Mesh Wireframe</span>
+      </button>
+    </div>
+
+    <!-- Section 02: Biomechanical Physics Engine -->
+    <section class="editorial-section">
+      <div class="editorial-container">
+        
+        <div class="section-badge-row">
+          <span class="section-index-badge">02 // ARCHITECTURE</span>
+          <span class="section-sub-title">COMPUTATIONAL FINITE ELEMENT KINEMATICS</span>
+        </div>
+
+        <h2 class="editorial-title">
+          From Medical DICOM Scans to <br>
+          <span class="serif-sub">Sub-Millimeter Elastic Solids.</span>
+        </h2>
+
+        <div class="editorial-columns-grid">
           
-          <div class="section-lead-block">
-            <div class="editorial-tag">
-              <span class="tag-num">02.0</span>
-              <span class="tag-title">SEQUENCE ALIGNMENT & MUTATION BENCH</span>
-            </div>
-            <h2 class="section-heading">Atomic Nucleotide Sequence Matrix</h2>
-            <p class="section-description">
-              Directly interrogate individual base pairs in the 3D space. Click any codon to mutate nucleotide positions and observe real-time structural refolding kinematics.
+          <div class="editorial-column-card">
+            <div class="column-top-index">01</div>
+            <h3 class="column-heading">Anisotropic Fiber Fields</h3>
+            <p class="column-text">
+              Cardiomyocyte alignment follows helical myocardial angles from -60&deg; sub-epicardium to +60&deg; sub-endocardium, generating authentic torsional wringing motion during systole.
             </p>
+            <div class="column-meta-tag">ANISOTROPIC STRAIN TENSOR</div>
           </div>
 
-          <!-- Sequence Interaction Console -->
-          <div class="sequence-console">
-            
-            <div class="console-header">
-              <div class="console-title">
-                <span class="console-dot"></span>
-                <span>SEQUENCE STREAM // 5' &rarr; 3' SENSE STRAND</span>
-              </div>
-              <div class="console-stats">
-                <span>GC CONTENT: <strong id="gc-content">55.0%</strong></span>
-                <span>MELTING TEMP: <strong>72.4 &deg;C</strong></span>
-              </div>
-            </div>
-
-            <!-- Clickable Nucleotides Grid -->
-            <div class="nucleotide-track" id="nucleotide-track">
-              <!-- Rendered via app.js -->
-            </div>
-
-            <div class="console-footer">
-              <div class="base-legend">
-                <span class="legend-item"><span class="color-dot dot-a"></span> Adenine (A)</span>
-                <span class="legend-item"><span class="color-dot dot-t"></span> Thymine (T)</span>
-                <span class="legend-item"><span class="color-dot dot-g"></span> Guanine (G)</span>
-                <span class="legend-item"><span class="color-dot dot-c"></span> Cytosine (C)</span>
-              </div>
-              <div class="console-btn-group">
-                <button class="btn-console" onclick="injectPathogenicVariant()">Inject Variant (rs77932196)</button>
-                <button class="btn-console" onclick="restoreWildtypeSequence()">Restore Reference</button>
-              </div>
-            </div>
-
+          <div class="editorial-column-card">
+            <div class="column-top-index">02</div>
+            <h3 class="column-heading">Hemodynamic Vorticity</h3>
+            <p class="column-text">
+              Coupled Eulerian-Lagrangian fluid dynamics resolve swirling diastolic vortex rings inside the left ventricular apex, minimizing viscous energy dissipation across cardiac cycles.
+            </p>
+            <div class="column-meta-tag">NAVIER-STOKES INCOMPRESSIBLE</div>
           </div>
 
-          <!-- 3-Column Structural Metrics -->
-          <div class="metrics-editorial-grid">
-            
-            <div class="metric-editorial-card">
-              <span class="card-num">01</span>
-              <h3 class="card-headline">Sub-Angstrom Prime Editing</h3>
-              <p class="card-body">
-                Our engineered Cas9-reverse transcriptase complexes achieve pegRNA search-and-replace precision with off-target profiles below instrument detection limits (&lt;0.0001%).
-              </p>
-              <div class="card-foot">
-                <span>FIDELITY RATING</span>
-                <strong class="text-cyan">99.98%</strong>
-              </div>
-            </div>
-
-            <div class="metric-editorial-card">
-              <span class="card-num">02</span>
-              <h3 class="card-headline">Connectome Axonal Growth</h3>
-              <p class="card-body">
-                Targeted neuro-regenerative peptides stimulate guided synaptic sprouting across cortical fissures, mapping over 14,000 functional node connections.
-              </p>
-              <div class="card-foot">
-                <span>SYNAPTIC SPEED</span>
-                <strong class="text-emerald">120 m/s</strong>
-              </div>
-            </div>
-
-            <div class="metric-editorial-card">
-              <span class="card-num">03</span>
-              <h3 class="card-headline">Thermodynamic Free Energy</h3>
-              <p class="card-body">
-                Ab initio quantum mechanical energy minimization ensures all engineered molecular conformations occupy the global thermodynamic minimum (&Delta;G &lt; -14 kcal/mol).
-              </p>
-              <div class="card-foot">
-                <span>DISSOCIATION CONSTANT</span>
-                <strong class="text-cyan">Kd = 1.4 nM</strong>
-              </div>
-            </div>
-
+          <div class="editorial-column-card">
+            <div class="column-top-index">03</div>
+            <h3 class="column-heading">Electrophysiology Mapping</h3>
+            <p class="column-text">
+              Real-time Aliev-Panfilov reaction-diffusion equations calculate transmembrane action potential velocity (0.8 m/s along Purkinje fibers) driving synchronized myocardial depolarization.
+            </p>
+            <div class="column-meta-tag">128-CH BODY SURFACE POTENTIAL</div>
           </div>
 
         </div>
-      </section>
 
-      <!-- Section 03: Clinical Pipeline -->
-      <section id="pipeline" class="content-section">
-        <div class="section-container">
-          
-          <div class="section-lead-block">
-            <div class="editorial-tag">
-              <span class="tag-num">03.0</span>
-              <span class="tag-title">TRANSLATIONAL PIPELINE</span>
-            </div>
-            <h2 class="section-heading">Clinical Development Program</h2>
-          </div>
+      </div>
+    </section>
 
-          <div class="pipeline-table">
-            
-            <div class="pipeline-row pipeline-head">
-              <div class="col-code">PROGRAM</div>
-              <div class="col-indication">INDICATION / TARGET</div>
-              <div class="col-modality">MODALITY</div>
-              <div class="col-stage">STAGE</div>
-              <div class="col-status">STATUS</div>
-            </div>
-
-            <div class="pipeline-row">
-              <div class="col-code"><strong>PRM-101</strong></div>
-              <div class="col-indication">Cystic Fibrosis (CFTR &Delta;F508)</div>
-              <div class="col-modality">CRISPR Prime Vector</div>
-              <div class="col-stage"><span class="stage-badge phase-3">Phase III Enrolling</span></div>
-              <div class="col-status text-emerald">Fast Track Designated</div>
-            </div>
-
-            <div class="pipeline-row">
-              <div class="col-code"><strong>PRM-204</strong></div>
-              <div class="col-indication">Cortical Stroke Rehabilitation (TrkB)</div>
-              <div class="col-modality">Neuro-Synaptic Peptide</div>
-              <div class="col-stage"><span class="stage-badge phase-2">Phase II Active</span></div>
-              <div class="col-status text-cyan">Cohort Expansion</div>
-            </div>
-
-            <div class="pipeline-row">
-              <div class="col-code"><strong>PRM-308</strong></div>
-              <div class="col-indication">Solid Tumor Micro-Environment (PD-L1/VEGF)</div>
-              <div class="col-modality">Lipid Nanocarrier</div>
-              <div class="col-stage"><span class="stage-badge phase-1">Phase I Complete</span></div>
-              <div class="col-status">Dose Escalation</div>
-            </div>
-
-          </div>
-
+    <!-- Section 03: Clinical Verification Table -->
+    <section class="editorial-section">
+      <div class="editorial-container">
+        
+        <div class="section-badge-row">
+          <span class="section-index-badge">03 // VALIDATION</span>
+          <span class="section-sub-title">CLINICAL COHORT BENCHMARKS</span>
         </div>
-      </section>
 
-      <!-- Section 04: Publications -->
-      <section id="publications" class="content-section">
-        <div class="section-container">
-          
-          <div class="section-lead-block">
-            <div class="editorial-tag">
-              <span class="tag-num">04.0</span>
-              <span class="tag-title">PEER-REVIEWED RESEARCH</span>
-            </div>
-            <h2 class="section-heading">Scientific Publications</h2>
+        <h2 class="editorial-title">Clinical Accuracy Benchmarks</h2>
+
+        <div class="benchmark-data-table">
+          <div class="table-row table-head">
+            <div>PARAMETER</div>
+            <div>IN SILICO COMPUTED</div>
+            <div>MRI / IN VIVO GOLD STANDARD</div>
+            <div>CONCORDANCE</div>
           </div>
-
-          <div class="publications-list">
-            
-            <article class="publication-item">
-              <div class="pub-date">2026.04</div>
-              <div class="pub-content">
-                <span class="pub-journal">NATURE STRUCTURAL & MOLECULAR BIOLOGY</span>
-                <h3 class="pub-heading">Cryo-EM visualization of atomic-scale pegRNA conformational intermediates in prime editor 3 complexes</h3>
-                <p class="pub-citation">Sathvik, K., Chen, L., Vance, A., Robertson, M. et al. • Vol 33, pp. 412–428</p>
-              </div>
-              <div class="pub-link-wrap">
-                <span class="doi-label">doi:10.1038/s41594-026-00892</span>
-              </div>
-            </article>
-
-            <article class="publication-item">
-              <div class="pub-date">2026.01</div>
-              <div class="pub-content">
-                <span class="pub-journal">CELL GENOMICS</span>
-                <h3 class="pub-heading">High-dimensional 3D holographic mapping of cortical axonal electro-kinetics and synaptic plasticity</h3>
-                <p class="pub-citation">Vanderbilt, E., Nakamoto, S., Gupta, R., Sathvik, K. • Vol 6, Issue 1, 100492</p>
-              </div>
-              <div class="pub-link-wrap">
-                <span class="doi-label">doi:10.1016/j.cellgen.2026.100492</span>
-              </div>
-            </article>
-
+          <div class="table-row">
+            <div class="row-param">Left Ventricle End-Diastolic Vol</div>
+            <div>142.6 &plusmn; 4.2 mL</div>
+            <div>144.1 &plusmn; 5.0 mL</div>
+            <div class="concordance-high">99.1% MATCH</div>
           </div>
-
+          <div class="table-row">
+            <div class="row-param">Peak Aortic Velocity ($v_{\max}$)</div>
+            <div>1.32 &plusmn; 0.08 m/s</div>
+            <div>1.30 &plusmn; 0.10 m/s</div>
+            <div class="concordance-high">98.5% MATCH</div>
+          </div>
+          <div class="table-row">
+            <div class="row-param">Global Longitudinal Strain (&epsilon;)</div>
+            <div>-19.4%</div>
+            <div>-19.8%</div>
+            <div class="concordance-high">98.0% MATCH</div>
+          </div>
+          <div class="table-row">
+            <div class="row-param">Wall Shear Stress ($\tau_w$)</div>
+            <div>2.4 Pa</div>
+            <div>2.3 Pa</div>
+            <div class="concordance-high">96.8% MATCH</div>
+          </div>
         </div>
-      </section>
 
-    </main>
+      </div>
+    </section>
 
     <!-- Global Footer -->
-    <footer class="site-footer">
-      <div class="footer-inner">
-        <div class="footer-brand-block">
-          <div class="brand-monogram">PRISM / STRUCTURAL GENOMICS</div>
-          <p class="footer-text">
-            Pioneering the boundary of structural biophysics and autonomous molecular therapeutics. All computational structures verified via Cryo-EM and synchrotron crystallography.
+    <footer class="app-footer">
+      <div class="footer-container">
+        <div class="footer-primary-block">
+          <div class="footer-logo">AURA // COMPUTATIONAL HEMODYNAMICS</div>
+          <p class="footer-disclaimer">
+            Developed in collaboration with clinical cardiovascular biomechanics laboratories. Computational models verified against multi-vendor 4D Flow MRI and invasive pressure wire telemetry.
           </p>
         </div>
-        <div class="footer-nav-block">
-          <div class="footer-nav-col">
-            <span class="footer-col-title">NAVIGATION</span>
-            <a href="#hero">Structural Atlas</a>
-            <a href="#workbench">Sequence Bench</a>
-            <a href="#pipeline">Clinical Program</a>
-            <a href="#publications">Publications</a>
+        <div class="footer-links-cluster">
+          <div class="cluster-col">
+            <span class="cluster-label">SYSTEMS</span>
+            <a href="javascript:void(0)" onclick="switchOrganModel('heart')">Myocardial Kinematics</a>
+            <a href="javascript:void(0)" onclick="switchOrganModel('brain')">Connectome Dynamics</a>
+            <a href="javascript:void(0)">4D Flow MRI Reconstructor</a>
           </div>
-          <div class="footer-nav-col">
-            <span class="footer-col-title">INSTITUTE</span>
-            <a href="javascript:void(0)" onclick="openModal()">Researcher Access</a>
-            <a href="javascript:void(0)">Data Standards (PDB / mmCIF)</a>
-            <a href="javascript:void(0)">Ethics & Biosafety</a>
+          <div class="cluster-col">
+            <span class="cluster-label">CLINICAL</span>
+            <a href="https://github.com/Sathvik1533/genomix-3d-ai" target="_blank">GitHub Repository ↗</a>
+            <a href="javascript:void(0)" onclick="openContactSheet()">Access Request</a>
+            <a href="javascript:void(0)">FDA Software-as-Device (SaMD)</a>
           </div>
         </div>
       </div>
-      <div class="footer-bottom-bar">
-        <p>&copy; 2026 PRISM GENOMICS BIOTHERAPEUTICS INC. • ALL RIGHTS RESERVED • PROPRIETARY ATOMIC DESIGN ENGINE</p>
+      <div class="footer-legal">
+        &copy; 2026 AURA BIOMECHANICAL SYSTEMS INC. • PROPRIETARY 3D VOLUMETRIC FINITE ELEMENT SOLVER
       </div>
     </footer>
 
   </div>
 
-  <!-- Access Portal Modal -->
-  <div id="access-modal" class="modal-backdrop">
-    <div class="modal-window">
-      <div class="modal-header">
-        <span class="modal-tag">RESEARCHER ACCESS</span>
-        <button class="modal-close-btn" onclick="closeModal()">&times;</button>
+  <!-- Clinical Request Modal -->
+  <div id="contact-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-top">
+        <span class="modal-tag">CLINICAL ACCESS INQUIRY</span>
+        <button class="modal-close" onclick="closeContactSheet()">&times;</button>
       </div>
-      <h3 class="modal-heading">Request Structural Data Portal Access</h3>
-      <p class="modal-description">
-        Accredited academic institutions and clinical investigators can request raw Cryo-EM coordinate sets (.cif/.pdb) and clinical trial protocol sheets.
+      <h3 class="modal-headline">Request Biokinetic Solver Platform Access</h3>
+      <p class="modal-lead">
+        Submit institutional credentials for multi-planar volumetric DICOM ingestion and patient-specific surgical simulation.
       </p>
 
-      <form onsubmit="handleFormSubmit(event)" class="modal-form">
-        <div class="field-group">
-          <label>Principal Investigator / Full Name</label>
-          <input type="text" placeholder="Dr. Elena Rostova" required class="text-input">
+      <form onsubmit="handleInquirySubmit(event)" class="modal-fields">
+        <div class="input-block">
+          <label>Lead Cardiologist / Investigator</label>
+          <input type="text" placeholder="Dr. Marcus Thorne, MD" required>
         </div>
-        <div class="field-group">
-          <label>Institutional Email Address</label>
-          <input type="email" placeholder="e.rostova@stanford.edu" required class="text-input">
+        <div class="input-block">
+          <label>Hospital / Academic Institution</label>
+          <input type="email" placeholder="mthorne@hopkinsmedicine.org" required>
         </div>
-        <div class="field-group">
-          <label>Area of Research</label>
-          <select class="text-input">
-            <option>CRISPR Prime Editing & In Vivo Delivery</option>
-            <option>Cortical Axonal Sprouting & Neurogenesis</option>
-            <option>Cryo-EM Structural Coordinate Access</option>
+        <div class="input-block">
+          <label>Simulation Area</label>
+          <select>
+            <option>Transcatheter Aortic Valve Replacement (TAVR) Planning</option>
+            <option>Heart Failure Left Ventricular Assist Device (LVAD) Hemodynamics</option>
+            <option>Congenital Heart Disease Surgical Reconstruction</option>
           </select>
         </div>
-        <button type="submit" class="btn-solid w-full mt-2">
-          <span>Submit Credential Verification</span>
+        <button type="submit" class="btn-submit-modal">
+          <span>Submit Access Verification</span>
         </button>
       </form>
     </div>
