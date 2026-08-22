@@ -1,38 +1,95 @@
 /**
- * SYNAPSE // ADVANCED GLSL COMPUTATIONAL NEURO-GENOMICS
- * 65,536 GPU Particles with Curl Noise, Action Potential Waves & Custom ShaderMaterial
+ * HELIX // PRECISION DNA PHARMACOGENOMICS & MOLECULAR DOCKING ENGINE
+ * Sub-Angstrom 3D DNA Double Helix, Small-Molecule Ligand Kinematics & Web Audio Engine
  */
 
 let scene, camera, renderer, controls;
-let activeTopology = 'brain'; // 'brain' | 'dna' | 'flow'
 let autoOrbit = true;
 let isAudioActive = true;
 let audioCtx = null;
 let clock = new THREE.Clock();
 
-// Shader Uniforms & Particle Mesh
-let particleSystem, particleMaterial;
-let count = 65536;
-let originalPositions, dnaPositions, flowPositions;
+// 3D Master Objects
+let dnaRoot, strand1Tube, strand2Tube, rungsGroup, hydrationShellGroup, drugLigandMesh;
+let isHydrationVisible = true;
 
-// Parameters
-let turbulenceVal = 1.25;
-let speedMultiplier = 1.0;
-let surgeActive = 0.0;
+// Active Sequence State
+const BASES = ['A', 'T', 'G', 'C'];
+const BASE_COLORS = {
+  A: 0x00f0ff, // Spectral Cyan
+  T: 0xff2d55, // Precision Rose
+  G: 0x00e676, // Emerald
+  C: 0xffd600  // Gold
+};
 
-// Mouse Interaction
-let mouseX = 0, mouseY = 0;
-let mouseVector = new THREE.Vector2(0, 0);
-let targetCameraX = 0, targetCameraY = 0;
+let activeSequence = [
+  'A', 'T', 'G', 'C', 'C', 'G', 'T', 'A', 'A', 'T', 'C', 'G', 'T', 'A', 'G', 'C', 'A', 'T', 'G', 'C', 'G', 'C', 'A', 'T'
+];
+
+// Active Drug Metadata
+const DRUG_DATA = {
+  trikafta: {
+    name: 'Elexacaftor-01 (100mg Solid Oral Tablet)',
+    desc: 'Dual-action cystic fibrosis transmembrane conductance regulator corrector that binds directly to the nucleotide-binding domain (NBD1) of mutant CFTR protein.',
+    kd: 'Kd = 1.4 nM',
+    energy: '-14.2 kcal/mol',
+    res: 't1/2 = 4.8 hr',
+    bio: '84.6% Oral',
+    pk: 'LogP = 3.2',
+    cl: 'Hepatic CYP3A4',
+    color: 0x00f0ff
+  },
+  nusinersen: {
+    name: 'Spinraza-X (Splice Modulator Oligonucleotide)',
+    desc: 'Synthetic 2\'-O-methoxyethyl phosphorothioate antisense oligonucleotide that binds to SMN2 pre-mRNA to promote full-length SMN protein translation.',
+    kd: 'Kd = 0.8 nM',
+    energy: '-16.8 kcal/mol',
+    res: 't1/2 = 135 days',
+    bio: 'Intrathecal / IV',
+    pk: 'Hydrophilic',
+    cl: 'Renal Excretion',
+    color: 0x00e676
+  },
+  crispr: {
+    name: 'Prime-Edit 3.0 (Cas9-RT Lipid Nanoparticle)',
+    desc: 'Engineered nickase fused to reverse transcriptase guided by prime editing guide RNA (pegRNA) to rewrite genetic mutations without double-strand breaks.',
+    kd: 'Kd = 0.12 nM',
+    energy: '-19.4 kcal/mol',
+    res: 'Permanent Edit',
+    bio: 'Lipid Nanocarrier',
+    pk: 'Nanoscale 85nm',
+    cl: 'Macrophage System',
+    color: 0xa855f7
+  },
+  epigenetic: {
+    name: 'Methyl-Silencer (BRCA Epigenetic Ligand)',
+    desc: 'Selective allosteric DNA methyltransferase inhibitor that resets hypermethylated tumor suppressor promoters back to normal transcription levels.',
+    kd: 'Kd = 2.1 nM',
+    energy: '-12.6 kcal/mol',
+    res: 't1/2 = 8.2 hr',
+    bio: '78.2% Oral',
+    pk: 'LogP = 2.8',
+    cl: 'Glucuronidation',
+    color: 0xffd600
+  }
+};
+
+let currentDrugKey = 'trikafta';
 
 // Telemetry Canvas
-let telemCanvas, telemCtx;
+let bindingCanvas, bindingCtx;
 let telemX = 0, lastTelemY = 42;
+
+// Pointer Follower
+let mouseX = 0, mouseY = 0;
+let pointerX = 0, pointerY = 0;
+let auraX = 0, auraY = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
   initEngine();
-  initCustomCursor();
-  initTelemetryCanvas();
+  initPointer();
+  initBindingCanvas();
+  renderCodonsTrack();
   animate();
 
   window.addEventListener('resize', onResize);
@@ -40,144 +97,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ==========================================================================
-   GLSL SHADERS (CUSTOM VERTEX & FRAGMENT SHADER)
-   ========================================================================== */
-
-const vertexShader = `
-  uniform float uTime;
-  uniform float uTurbulence;
-  uniform float uSpeed;
-  uniform float uSurge;
-  uniform vec2 uMouse;
-  uniform float uMorphProgress; // 0.0: Brain, 1.0: Target
-
-  attribute vec3 aTargetPos;
-  attribute float aPhase;
-  attribute vec3 aColor;
-
-  varying vec3 vColor;
-  varying float vAlpha;
-
-  // Simplex 3D Noise Functions
-  vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-  vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-  vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
-  vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
-
-  float snoise(vec3 v) {
-    const vec2 C = vec2(1.0/6.0, 1.0/3.0);
-    const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
-    vec3 i  = floor(v + dot(v, C.yyy));
-    vec3 x0 = v - i + dot(i, C.xxx);
-    vec3 g = step(x0.yzx, x0.xyz);
-    vec3 l = 1.0 - g;
-    vec3 i1 = min(g.xyz, l.zxy);
-    vec3 i2 = max(g.xyz, l.zxy);
-    vec3 x1 = x0 - i1 + C.xxx;
-    vec3 x2 = x0 - i2 + C.yyy;
-    vec3 x3 = x0 - D.yyy;
-    i = mod289(i);
-    vec4 p = permute(permute(permute(
-              i.z + vec4(0.0, i1.z, i2.z, 1.0))
-            + i.y + vec4(0.0, i1.y, i2.y, 1.0))
-            + i.x + vec4(0.0, i1.x, i2.x, 1.0));
-    float n_ = 0.142857142857;
-    vec3 ns = n_ * D.wyz - D.xzx;
-    vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
-    vec4 x_ = floor(j * ns.z);
-    vec4 y_ = floor(j - 7.0 * x_);
-    vec4 x = x_ *ns.x + ns.yyyy;
-    vec4 y = y_ *ns.x + ns.yyyy;
-    vec4 h = 1.0 - abs(x) - abs(y);
-    vec4 b0 = vec4(x.xy, y.xy);
-    vec4 b1 = vec4(x.zw, y.zw);
-    vec4 s0 = floor(b0)*2.0 + 1.0;
-    vec4 s1 = floor(b1)*2.0 + 1.0;
-    vec4 sh = -step(h, vec4(0.0));
-    vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy;
-    vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
-    vec3 p0 = vec3(a0.xy, h.x);
-    vec3 p1 = vec3(a0.zw, h.y);
-    vec3 p2 = vec3(a1.xy, h.z);
-    vec3 p3 = vec3(a1.zw, h.w);
-    vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
-    p0 *= norm.x;
-    p1 *= norm.y;
-    p2 *= norm.z;
-    p3 *= norm.w;
-    vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
-    m = m * m;
-    return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
-  }
-
-  void main() {
-    // Morph between Base position and Target topology
-    vec3 basePos = mix(position, aTargetPos, uMorphProgress);
-
-    // Compute Organic Wave & Curl Noise
-    float t = uTime * uSpeed * 0.6 + aPhase;
-    vec3 noiseVec = vec3(
-      snoise(basePos * 0.8 + vec3(t * 0.3, 0.0, 0.0)),
-      snoise(basePos * 0.8 + vec3(0.0, t * 0.3, 0.0)),
-      snoise(basePos * 0.8 + vec3(0.0, 0.0, t * 0.3))
-    );
-
-    vec3 finalPos = basePos + noiseVec * (0.15 * uTurbulence);
-
-    // Action Potential Surge Expansion
-    if (uSurge > 0.01) {
-      float wave = sin(length(finalPos) * 4.0 - uTime * 12.0);
-      finalPos += normalize(finalPos) * wave * (uSurge * 0.45);
-    }
-
-    // Mouse repulsion vector
-    vec4 worldPos = modelMatrix * vec4(finalPos, 1.0);
-    vec4 mvPosition = viewMatrix * worldPos;
-
-    gl_Position = projectionMatrix * mvPosition;
-
-    // Size Attenuation with Camera Distance
-    float pSize = (14.0 / -mvPosition.z) * (1.0 + uSurge * 0.8);
-    gl_PointSize = clamp(pSize, 1.5, 48.0);
-
-    // Dynamic Spectral Shading
-    vColor = aColor;
-    if (uSurge > 0.01) {
-      vColor = mix(vColor, vec3(1.0, 1.0, 1.0), uSurge);
-    }
-
-    vAlpha = clamp(1.2 / (-mvPosition.z * 0.18), 0.2, 0.95);
-  }
-`;
-
-const fragmentShader = `
-  varying vec3 vColor;
-  varying float vAlpha;
-
-  void main() {
-    // Soft circular biophoton particle falloff
-    vec2 coord = gl_PointCoord - vec2(0.5);
-    float dist = length(coord);
-
-    if (dist > 0.5) discard;
-
-    // Radial exponential glow
-    float intensity = exp(-dist * 5.0);
-    gl_FragColor = vec4(vColor, vAlpha * intensity);
-  }
-`;
-
-/* ==========================================================================
-   INITIALIZE ENGINE & PARTICLES
+   INITIALIZATION
    ========================================================================== */
 
 function initEngine() {
-  const container = document.getElementById('webgl-viewport');
+  const container = document.getElementById('webgl-canvas');
   scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x05070a, 0.032);
+  scene.fog = new THREE.FogExp2(0x04060a, 0.035);
 
   camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.set(0, 0.2, 8.5);
+  camera.position.set(0, 0.3, 8.8);
 
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -195,120 +124,208 @@ function initEngine() {
     controls.enablePan = false;
   }
 
-  // Generate Topological Coordinate Sets
-  generateTopologies();
+  // Dramatic Studio Lighting
+  const ambient = new THREE.AmbientLight(0x0a101d, 3.2);
+  scene.add(ambient);
 
-  // Create GPU Particle System with Custom ShaderMaterial
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.BufferAttribute(originalPositions, 3));
-  geometry.setAttribute('aTargetPos', new THREE.BufferAttribute(dnaPositions, 3));
+  const cyanKey = new THREE.PointLight(0x00f0ff, 4.5, 24);
+  cyanKey.position.set(5, 6, 4);
+  scene.add(cyanKey);
 
-  // Particle phases & colors
-  const phases = new Float32Array(count);
-  const colors = new Float32Array(count * 3);
+  const emeraldFill = new THREE.PointLight(0x00e676, 3.2, 22);
+  emeraldFill.position.set(-5, -3, 3);
+  scene.add(emeraldFill);
 
-  for (let i = 0; i < count; i++) {
-    phases[i] = Math.random() * Math.PI * 2;
-    
-    // Spectral palette: Cyan (#00f0ff), Emerald (#00e676), Rose (#ff2d55), Purple (#a855f7)
-    const pz = originalPositions[i * 3 + 2];
-    const py = originalPositions[i * 3 + 1];
+  const goldRim = new THREE.DirectionalLight(0xffd600, 1.2);
+  goldRim.position.set(0, 8, -5);
+  scene.add(goldRim);
 
-    let c = new THREE.Color(0x00f0ff);
-    if (pz > 0.4) c = new THREE.Color(0x00f0ff);
-    else if (pz <= 0.4 && pz > -0.4 && py > 0.1) c = new THREE.Color(0xa855f7);
-    else if (py <= 0.1 && pz > -0.6) c = new THREE.Color(0x00e676);
-    else c = new THREE.Color(0xff2d55);
+  // Build Master DNA & Hydration Systems
+  buildQuantumDNASystem();
+  buildHydrationShellSystem();
+  buildDrugLigandMesh();
+}
 
-    colors[i * 3] = c.r;
-    colors[i * 3 + 1] = c.g;
-    colors[i * 3 + 2] = c.b;
+/* ==========================================================================
+   3D QUANTUM DNA DOUBLE HELIX
+   ========================================================================== */
+
+function buildQuantumDNASystem() {
+  if (dnaRoot) scene.remove(dnaRoot);
+
+  dnaRoot = new THREE.Group();
+  dnaRoot.position.set(1.4, 0, 0); // Positioned for right-side visual weight
+
+  const pairCount = activeSequence.length;
+  const height = 9.8;
+  const radius = 1.3;
+  const turns = 2.5;
+
+  const strand1Pts = [];
+  const strand2Pts = [];
+  rungsGroup = new THREE.Group();
+
+  for (let i = 0; i < pairCount; i++) {
+    const t = i / (pairCount - 1);
+    const angle = t * Math.PI * 2 * turns;
+    const y = (t - 0.5) * height;
+
+    const x1 = Math.cos(angle) * radius;
+    const z1 = Math.sin(angle) * radius;
+    const x2 = Math.cos(angle + Math.PI) * radius;
+    const z2 = Math.sin(angle + Math.PI) * radius;
+
+    strand1Pts.push(new THREE.Vector3(x1, y, z1));
+    strand2Pts.push(new THREE.Vector3(x2, y, z2));
+
+    const base1 = activeSequence[i];
+    const base2 = (base1 === 'A') ? 'T' : (base1 === 'T') ? 'A' : (base1 === 'G') ? 'C' : 'G';
+    const pMid = new THREE.Vector3((x1 + x2) / 2, y, (z1 + z2) / 2);
+
+    // Half Rung 1
+    const rGeo = new THREE.CylinderGeometry(0.06, 0.06, radius, 16);
+    const rMat1 = new THREE.MeshPhysicalMaterial({
+      color: BASE_COLORS[base1],
+      emissive: BASE_COLORS[base1],
+      emissiveIntensity: 0.5,
+      metalness: 0.1,
+      roughness: 0.25,
+      clearcoat: 0.8
+    });
+    const rMesh1 = new THREE.Mesh(rGeo, rMat1);
+    rMesh1.position.set((x1 + pMid.x) / 2, y, (z1 + pMid.z) / 2);
+    rMesh1.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(x1 - pMid.x, 0, z1 - pMid.z).normalize());
+    rungsGroup.add(rMesh1);
+
+    // Half Rung 2
+    const rMat2 = new THREE.MeshPhysicalMaterial({
+      color: BASE_COLORS[base2],
+      emissive: BASE_COLORS[base2],
+      emissiveIntensity: 0.5,
+      metalness: 0.1,
+      roughness: 0.25,
+      clearcoat: 0.8
+    });
+    const rMesh2 = new THREE.Mesh(rGeo, rMat2);
+    rMesh2.position.set((x2 + pMid.x) / 2, y, (z2 + pMid.z) / 2);
+    rMesh2.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(x2 - pMid.x, 0, z2 - pMid.z).normalize());
+    rungsGroup.add(rMesh2);
+
+    // Hydrogen Bonding Center Node
+    const node = new THREE.Mesh(
+      new THREE.SphereGeometry(0.08, 16, 16),
+      new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.8, roughness: 0.1 })
+    );
+    node.position.copy(pMid);
+    rungsGroup.add(node);
   }
 
-  geometry.setAttribute('aPhase', new THREE.BufferAttribute(phases, 1));
-  geometry.setAttribute('aColor', new THREE.BufferAttribute(colors, 3));
+  // Sugar-Phosphate Helical Ribbons (Translucent Polymer Sheen)
+  const curve1 = new THREE.CatmullRomCurve3(strand1Pts);
+  const curve2 = new THREE.CatmullRomCurve3(strand2Pts);
 
-  particleMaterial = new THREE.ShaderMaterial({
-    vertexShader: vertexShader,
-    fragmentShader: fragmentShader,
-    uniforms: {
-      uTime: { value: 0.0 },
-      uTurbulence: { value: turbulenceVal },
-      uSpeed: { value: speedMultiplier },
-      uSurge: { value: 0.0 },
-      uMouse: { value: new THREE.Vector2(0, 0) },
-      uMorphProgress: { value: 0.0 }
-    },
+  const ribbonMat = new THREE.MeshPhysicalMaterial({
+    color: 0x00f0ff,
+    emissive: 0x004753,
+    metalness: 0.2,
+    roughness: 0.18,
+    clearcoat: 1.0,
+    clearcoatRoughness: 0.1,
+    transmission: 0.35,
+    thickness: 0.6
+  });
+
+  strand1Tube = new THREE.Mesh(new THREE.TubeGeometry(curve1, 120, 0.11, 16, false), ribbonMat);
+  strand2Tube = new THREE.Mesh(new THREE.TubeGeometry(curve2, 120, 0.11, 16, false), ribbonMat);
+
+  dnaRoot.add(strand1Tube);
+  dnaRoot.add(strand2Tube);
+  dnaRoot.add(rungsGroup);
+
+  scene.add(dnaRoot);
+}
+
+/* ==========================================================================
+   HYDRATION SHELL & SOLVENT MOLECULES
+   ========================================================================== */
+
+function buildHydrationShellSystem() {
+  hydrationShellGroup = new THREE.Group();
+  hydrationShellGroup.position.set(1.4, 0, 0);
+
+  const count = 1800;
+  const geo = new THREE.BufferGeometry();
+  const pos = new Float32Array(count * 3);
+  const col = new Float32Array(count * 3);
+
+  for (let i = 0; i < count; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const r = 1.4 + Math.random() * 0.9;
+    const y = (Math.random() - 0.5) * 10.0;
+
+    pos[i * 3] = Math.cos(angle) * r;
+    pos[i * 3 + 1] = y;
+    pos[i * 3 + 2] = Math.sin(angle) * r;
+
+    // Glowing cyan/blue solvent embers
+    col[i * 3] = 0.0;
+    col[i * 3 + 1] = 0.94;
+    col[i * 3 + 2] = 1.0;
+  }
+
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+
+  const mat = new THREE.PointsMaterial({
+    size: 0.038,
+    vertexColors: true,
     transparent: true,
-    depthWrite: false,
+    opacity: 0.5,
     blending: THREE.AdditiveBlending
   });
 
-  particleSystem = new THREE.Points(geometry, particleMaterial);
-  particleSystem.position.set(1.4, 0, 0); // Positioned for editorial balance
-  scene.add(particleSystem);
+  const points = new THREE.Points(geo, mat);
+  hydrationShellGroup.add(points);
+  scene.add(hydrationShellGroup);
 }
 
 /* ==========================================================================
-   TOPOLOGY MATHEMATICS GENERATION
+   3D MOLECULAR DRUG TABLET / LIGAND MESH
    ========================================================================== */
 
-function generateTopologies() {
-  originalPositions = new Float32Array(count * 3); // Brain
-  dnaPositions = new Float32Array(count * 3);       // DNA
-  flowPositions = new Float32Array(count * 3);      // Flow Vortex
+function buildDrugLigandMesh() {
+  drugLigandMesh = new THREE.Group();
 
-  for (let i = 0; i < count; i++) {
-    // 1. BRAIN MANIFOLD (Dual hemisphere with gyri/sulci modulation)
-    const hem = Math.random() > 0.5 ? 1 : -1;
-    const u = Math.random() * Math.PI;
-    const v = Math.random() * Math.PI * 2;
+  // Tablet / Small-Molecule Polyhedral Complex
+  const coreGeo = new THREE.IcosahedronGeometry(0.35, 2);
+  const coreMat = new THREE.MeshPhysicalMaterial({
+    color: 0x00f0ff,
+    emissive: 0x00808c,
+    emissiveIntensity: 1.2,
+    metalness: 0.4,
+    roughness: 0.15,
+    clearcoat: 1.0,
+    wireframe: true
+  });
+  const core = new THREE.Mesh(coreGeo, coreMat);
+  drugLigandMesh.add(core);
 
-    let bx = 1.35 * Math.sin(u) * Math.cos(v);
-    let by = 1.05 * Math.cos(u);
-    let bz = 1.65 * Math.sin(u) * Math.sin(v);
+  // Outer Pharmacophore Orbital Rings
+  const ringGeo = new THREE.RingGeometry(0.42, 0.46, 32);
+  const ringMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, side: THREE.DoubleSide, transparent: true, opacity: 0.8 });
+  const ring1 = new THREE.Mesh(ringGeo, ringMat);
+  const ring2 = new THREE.Mesh(ringGeo, ringMat);
+  ring2.rotation.x = Math.PI / 2;
+  drugLigandMesh.add(ring1);
+  drugLigandMesh.add(ring2);
 
-    bx = hem * (Math.abs(bx) * 0.85 + 0.15);
-    if (by < -0.3 && bz < -0.4) { bx *= 0.85; bz -= 0.2; by -= 0.2; }
-
-    const gyri = Math.sin(bx * 6.5) * Math.cos(by * 6.5) * Math.sin(bz * 6.5) * 0.09;
-    bx += gyri; by += gyri; bz += gyri;
-
-    originalPositions[i * 3] = bx;
-    originalPositions[i * 3 + 1] = by;
-    originalPositions[i * 3 + 2] = bz;
-
-    // 2. DNA DOUBLE HELIX (Dual intertwined spirals with bridging rungs)
-    const t = (i / count) * 36.0;
-    const strand = (i % 2 === 0) ? 0 : Math.PI;
-    const radius = 1.25 + (Math.random() - 0.5) * 0.15;
-    const y = ((i / count) - 0.5) * 8.5;
-
-    // Strands + bridging rungs
-    let dx = Math.cos(t + strand) * radius;
-    let dz = Math.sin(t + strand) * radius;
-
-    if (i % 7 === 0) {
-      const interp = Math.random();
-      dx = (Math.cos(t) * radius) * interp + (Math.cos(t + Math.PI) * radius) * (1.0 - interp);
-      dz = (Math.sin(t) * radius) * interp + (Math.sin(t + Math.PI) * radius) * (1.0 - interp);
-    }
-
-    dnaPositions[i * 3] = dx;
-    dnaPositions[i * 3 + 1] = y;
-    dnaPositions[i * 3 + 2] = dz;
-
-    // 3. MOLECULAR FLOW VORTEX (Logarithmic Fibonacci torus)
-    const phi = i * 0.1;
-    const rad = Math.sqrt(i / count) * 2.2;
-    flowPositions[i * 3] = Math.cos(phi) * rad;
-    flowPositions[i * 3 + 1] = Math.sin(phi * 2.0) * 0.65;
-    flowPositions[i * 3 + 2] = Math.sin(phi) * rad;
-  }
+  drugLigandMesh.position.set(3.6, 0.2, 1.2);
+  drugLigandMesh.visible = false;
+  dnaRoot.add(drugLigandMesh);
 }
 
 /* ==========================================================================
-   RENDER & ANIMATION LOOP
+   ANIMATION LOOP
    ========================================================================== */
 
 function animate() {
@@ -317,29 +334,34 @@ function animate() {
   const delta = clock.getDelta();
   const time = clock.getElapsedTime();
 
-  if (particleMaterial) {
-    particleMaterial.uniforms.uTime.value = time;
-    particleMaterial.uniforms.uTurbulence.value = turbulenceVal;
-    particleMaterial.uniforms.uSpeed.value = speedMultiplier;
-
-    // Decay surge effect smoothly
-    if (surgeActive > 0.001) {
-      surgeActive = THREE.MathUtils.lerp(surgeActive, 0.0, 0.05);
-      particleMaterial.uniforms.uSurge.value = surgeActive;
-    }
-  }
-
-  // Smooth Orbit Rotation
-  if (autoOrbit && particleSystem) {
-    particleSystem.rotation.y += delta * 0.25 * speedMultiplier;
+  if (autoOrbit && dnaRoot) {
+    dnaRoot.rotation.y += delta * 0.35;
   }
 
   // Camera Parallax
-  targetCameraX = mouseX * 0.35;
-  targetCameraY = mouseY * 0.35;
-  if (particleSystem) {
-    particleSystem.rotation.x = THREE.MathUtils.lerp(particleSystem.rotation.x, targetCameraY * 0.2, 0.05);
-    particleSystem.rotation.z = THREE.MathUtils.lerp(particleSystem.rotation.z, targetCameraX * 0.15, 0.05);
+  const targetCamX = mouseX * 0.35;
+  const targetCamY = mouseY * 0.35;
+  if (dnaRoot) {
+    dnaRoot.rotation.x = THREE.MathUtils.lerp(dnaRoot.rotation.x, targetCamY * 0.2, 0.05);
+    dnaRoot.rotation.z = THREE.MathUtils.lerp(dnaRoot.rotation.z, targetCamX * 0.15, 0.05);
+  }
+
+  // Hydration Shell Brownian motion
+  if (hydrationShellGroup && isHydrationVisible) {
+    hydrationShellGroup.rotation.y = time * 0.03;
+  }
+
+  // Pointer Lerp
+  pointerX += (mouseX * window.innerWidth / 2 + window.innerWidth / 2 - pointerX) * 0.25;
+  pointerY += (-mouseY * window.innerHeight / 2 + window.innerHeight / 2 - pointerY) * 0.25;
+  auraX += (pointerX - auraX) * 0.15;
+  auraY += (pointerY - auraY) * 0.15;
+
+  const dot = document.getElementById('pointer-dot');
+  const aura = document.getElementById('pointer-aura');
+  if (dot && aura) {
+    dot.style.transform = `translate(${pointerX}px, ${pointerY}px)`;
+    aura.style.transform = `translate(${auraX}px, ${auraY}px)`;
   }
 
   if (controls) controls.update();
@@ -355,130 +377,172 @@ function onResize() {
 function onMouseMove(e) {
   mouseX = (e.clientX / window.innerWidth) * 2 - 1;
   mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-  mouseVector.set(mouseX, mouseY);
 }
 
 /* ==========================================================================
-   TOPOLOGY TRANSITIONS
+   DRUG MOLECULE SELECTOR
    ========================================================================== */
 
-function setTopology(topology) {
-  activeTopology = topology;
-  playAcousticPing(540, 0.1);
+function selectDrugMolecule(key) {
+  currentDrugKey = key;
+  const data = DRUG_DATA[key];
+  if (!data) return;
 
-  document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+  playAcousticPing(580, 0.1);
+
+  document.querySelectorAll('.drug-pill').forEach(p => p.classList.remove('active'));
   event.currentTarget.classList.add('active');
 
-  const ind = document.getElementById('mode-indicator');
-  const targetAttr = particleSystem.geometry.attributes.aTargetPos;
+  // Update UI Cards
+  document.getElementById('energy-stat').innerHTML = `${data.energy.split(' ')[0]} <span class="stat-unit">kcal/mol</span>`;
+  document.getElementById('kd-val').textContent = data.kd;
+  document.getElementById('res-val').textContent = data.res;
 
-  if (topology === 'brain') {
-    ind.textContent = 'NEURAL CONNECTOME MANIFOLD';
-    targetAttr.copyArray(originalPositions);
-    animateMorph(0.0);
-    camera.position.set(0, 0.2, 8.5);
-  } else if (topology === 'dna') {
-    ind.textContent = 'QUANTUM DNA DOUBLE HELIX';
-    targetAttr.copyArray(dnaPositions);
-    animateMorph(1.0);
-    camera.position.set(0, 0.4, 9.2);
-  } else if (topology === 'flow') {
-    ind.textContent = 'MOLECULAR FLOW VORTEX';
-    targetAttr.copyArray(flowPositions);
-    animateMorph(1.0);
-    camera.position.set(0, 0.2, 7.8);
-  }
+  document.getElementById('form-name').textContent = data.name;
+  document.getElementById('form-desc').textContent = data.desc;
+  document.getElementById('spec-bio').textContent = data.bio;
+  document.getElementById('spec-pk').textContent = data.pk;
+  document.getElementById('spec-cl').textContent = data.cl;
 
-  targetAttr.needsUpdate = true;
+  executeMolecularDocking();
 }
 
-function animateMorph(targetVal) {
-  let cur = particleMaterial.uniforms.uMorphProgress.value;
+function executeMolecularDocking() {
+  playAcousticPing(880, 0.2);
+  if (!drugLigandMesh) return;
+
+  const data = DRUG_DATA[currentDrugKey];
+  drugLigandMesh.visible = true;
+
+  document.getElementById('docking-badge').textContent = 'DOCKING IN PROGRESS...';
+  document.getElementById('docking-badge').style.color = '#ffd600';
+
   let t = 0;
   const interval = setInterval(() => {
-    t += 0.05;
-    particleMaterial.uniforms.uMorphProgress.value = THREE.MathUtils.lerp(cur, targetVal, t);
-    if (t >= 1) clearInterval(interval);
-  }, 20);
+    t += 0.04;
+    drugLigandMesh.position.x = THREE.MathUtils.lerp(3.6, 0.2, t);
+    drugLigandMesh.position.z = THREE.MathUtils.lerp(1.2, 0.8, t);
+    drugLigandMesh.rotation.y += 0.1;
+
+    if (t >= 1) {
+      clearInterval(interval);
+      document.getElementById('docking-badge').textContent = 'BOUND (Kd = 1.4 nM)';
+      document.getElementById('docking-badge').style.color = '#00e676';
+      playAcousticPing(1040, 0.25);
+    }
+  }, 25);
 }
 
 /* ==========================================================================
-   INTERACTIVE SHADER CONTROLS
+   SEQUENCE WORKBENCH
    ========================================================================== */
 
-function updateTurbulence(val) {
-  turbulenceVal = parseFloat(val);
-  document.getElementById('turb-val').textContent = turbulenceVal.toFixed(2);
+function renderCodonsTrack() {
+  const track = document.getElementById('codons-track');
+  if (!track) return;
+  track.innerHTML = '';
+
+  let gcCount = 0;
+  activeSequence.forEach((base, idx) => {
+    if (base === 'G' || base === 'C') gcCount++;
+
+    const item = document.createElement('div');
+    item.className = `codon-item base-${base.toLowerCase()}`;
+    item.innerHTML = `
+      <span class="c-pos">${idx + 1}</span>
+      <span class="c-char">${base}</span>
+    `;
+    item.title = `Position ${idx + 1}: ${base} (Click to toggle)`;
+    item.onclick = () => cycleBase(idx);
+    track.appendChild(item);
+  });
+
+  const gcPct = ((gcCount / activeSequence.length) * 100).toFixed(1);
+  const gcElem = document.getElementById('gc-stat');
+  if (gcElem) gcElem.textContent = `${gcPct}%`;
 }
 
-function updateSpeed(val) {
-  speedMultiplier = parseFloat(val);
-  document.getElementById('speed-val').textContent = `${speedMultiplier.toFixed(1)}x`;
+function cycleBase(idx) {
+  const cur = activeSequence[idx];
+  const next = BASES[(BASES.indexOf(cur) + 1) % BASES.length];
+  activeSequence[idx] = next;
+
+  playAcousticPing(520 + idx * 15, 0.05);
+  renderCodonsTrack();
+  buildQuantumDNASystem();
 }
 
-function triggerElectricSurge() {
-  surgeActive = 1.0;
-  playAcousticPing(880, 0.25);
+function induceTargetMutation() {
+  playAcousticPing(340, 0.15);
+  activeSequence[8] = 'T';
+  activeSequence[9] = 'A';
+  renderCodonsTrack();
+  buildQuantumDNASystem();
 
-  document.getElementById('frequency-stat').innerHTML = '256.8 <span class="stat-unit">Hz (Surge)</span>';
-  setTimeout(() => {
-    document.getElementById('frequency-stat').innerHTML = '128.4 <span class="stat-unit">Hz (Gamma)</span>';
-  }, 2000);
+  document.getElementById('docking-badge').textContent = 'VARIANT MUTATION DETECTED';
+  document.getElementById('docking-badge').style.color = '#ff2d55';
+  document.getElementById('energy-stat').innerHTML = '-8.4 <span class="stat-unit">kcal/mol</span>';
 }
 
-function resetParticleField() {
-  playAcousticPing(440, 0.1);
-  turbulenceVal = 1.25;
-  speedMultiplier = 1.0;
-  document.getElementById('slider-turb').value = 1.25;
-  document.getElementById('slider-speed').value = 1.0;
-  document.getElementById('turb-val').textContent = '1.25';
-  document.getElementById('speed-val').textContent = '1.0x';
+function resetWildtype() {
+  playAcousticPing(640, 0.1);
+  activeSequence = ['A', 'T', 'G', 'C', 'C', 'G', 'T', 'A', 'A', 'T', 'C', 'G', 'T', 'A', 'G', 'C', 'A', 'T', 'G', 'C', 'G', 'C', 'A', 'T'];
+  renderCodonsTrack();
+  buildQuantumDNASystem();
+
+  document.getElementById('docking-badge').textContent = 'WILDTYPE RESTING';
+  document.getElementById('docking-badge').style.color = '#00e676';
+  document.getElementById('energy-stat').innerHTML = '-14.2 <span class="stat-unit">kcal/mol</span>';
 }
 
-function toggleOrbit() {
+function toggleHydrationShell() {
+  isHydrationVisible = !isHydrationVisible;
+  if (hydrationShellGroup) hydrationShellGroup.visible = isHydrationVisible;
+}
+
+function toggleOrbitRotation() {
   autoOrbit = !autoOrbit;
   document.getElementById('orbit-btn').textContent = autoOrbit ? 'Pause Orbit' : 'Resume Orbit';
 }
 
-function resetCamera() {
-  camera.position.set(0, 0.2, 8.5);
+function resetCameraPersp() {
+  camera.position.set(0, 0.3, 8.8);
   if (controls) controls.target.set(0, 0, 0);
-  if (particleSystem) particleSystem.rotation.set(0, 0, 0);
+  if (dnaRoot) dnaRoot.rotation.set(0, 0, 0);
 }
 
 /* ==========================================================================
-   TELEMETRY CANVAS
+   2D BINDING KINETICS CANVAS
    ========================================================================== */
 
-function initTelemetryCanvas() {
-  telemCanvas = document.getElementById('telemetry-canvas');
-  if (!telemCanvas) return;
-  telemCtx = telemCanvas.getContext('2d');
-  telemCtx.lineWidth = 1.8;
+function initBindingCanvas() {
+  bindingCanvas = document.getElementById('binding-canvas');
+  if (!bindingCanvas) return;
+  bindingCtx = bindingCanvas.getContext('2d');
+  bindingCtx.lineWidth = 1.8;
 
-  setInterval(drawTelemStep, 35);
+  setInterval(drawBindingStep, 35);
 }
 
-function drawTelemStep() {
-  if (!telemCtx) return;
-  const w = telemCanvas.width;
-  const h = telemCanvas.height;
+function drawBindingStep() {
+  if (!bindingCtx) return;
+  const w = bindingCanvas.width;
+  const h = bindingCanvas.height;
   const midY = h / 2;
 
-  telemCtx.clearRect(telemX, 0, 8, h);
+  bindingCtx.clearRect(telemX, 0, 8, h);
 
   const t = Date.now() / 1000;
-  const y = midY + Math.sin(t * 5 + telemX * 0.08) * 18 * Math.cos(telemX * 0.03);
+  const y = midY + Math.sin(t * 4.5 + telemX * 0.08) * 16 * Math.cos(telemX * 0.035);
 
-  telemCtx.strokeStyle = '#00f0ff';
-  telemCtx.shadowBlur = 6;
-  telemCtx.shadowColor = '#00f0ff';
+  bindingCtx.strokeStyle = '#00f0ff';
+  bindingCtx.shadowBlur = 6;
+  bindingCtx.shadowColor = '#00f0ff';
 
-  telemCtx.beginPath();
-  telemCtx.moveTo(telemX, lastTelemY);
-  telemCtx.lineTo(telemX + 2, y);
-  telemCtx.stroke();
+  bindingCtx.beginPath();
+  bindingCtx.moveTo(telemX, lastTelemY);
+  bindingCtx.lineTo(telemX + 2, y);
+  bindingCtx.stroke();
 
   lastTelemY = y;
   telemX = (telemX + 2) % w;
@@ -507,41 +571,23 @@ function playAcousticPing(freq, dur) {
   } catch (e) {}
 }
 
-function toggleAudio() {
+function toggleAudioEngine() {
   isAudioActive = !isAudioActive;
-  document.getElementById('audio-status-text').textContent = isAudioActive ? 'SOUND: ON' : 'SOUND: OFF';
+  document.getElementById('audio-label').textContent = isAudioActive ? 'AUDIO: ACTIVE' : 'AUDIO: MUTED';
 }
 
-function initCustomCursor() {
-  const cursor = document.getElementById('cursor');
-  const follower = document.getElementById('cursor-follower');
-  let cx = 0, cy = 0, fx = 0, fy = 0;
+function initPointer() {}
 
-  document.addEventListener('mousemove', e => {
-    cx = e.clientX;
-    cy = e.clientY;
-    if (cursor) cursor.style.transform = `translate(${cx}px, ${cy}px)`;
-  });
-
-  function renderCursor() {
-    fx += (cx - fx) * 0.15;
-    fy += (cy - fy) * 0.15;
-    if (follower) follower.style.transform = `translate(${fx}px, ${fy}px)`;
-    requestAnimationFrame(renderCursor);
-  }
-  renderCursor();
+function openAccessSheet() {
+  document.getElementById('access-modal').classList.add('active');
 }
 
-function openPortal() {
-  document.getElementById('portal-modal').classList.add('active');
+function closeAccessSheet() {
+  document.getElementById('access-modal').classList.remove('active');
 }
 
-function closePortal() {
-  document.getElementById('portal-modal').classList.remove('active');
-}
-
-function handlePortalSubmit(e) {
+function handleAccessSubmit(e) {
   e.preventDefault();
-  alert('Credential verification submitted. Biophysical HDF5 tensor coordinates dispatched to your institutional email.');
-  closePortal();
+  alert('Clinical pipeline verification submitted. Pharmacogenomic PDB ligand coordinate sets dispatched.');
+  closeAccessSheet();
 }
