@@ -3,15 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ENUMERA // Computational DNA Therapeutics & Molecular Ligand Discovery</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>ENUMERA // Computational DNA Therapeutics & Quantum Pharmacogenomics</title>
   <meta name="description" content="Next-generation structure-based DNA pharmacogenomics, precision oral tablets, and atomic-resolution ligand docking.">
   
-  <!-- Curated Fonts -->
+  <!-- Premium Modern Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=2.4.1">
 
   <!-- Three.js Core -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -19,17 +22,17 @@
 </head>
 <body>
 
-  <!-- Filmic Grain Texture -->
+  <!-- Filmic Grain Texture Overlay -->
   <div class="noise-texture"></div>
 
   <!-- Fullscreen 3D WebGL Canvas Layer -->
   <div id="canvas-stage" class="canvas-stage"></div>
 
-  <!-- Custom Cursor -->
+  <!-- Custom Pointer -->
   <div id="cursor-dot" class="cursor-dot"></div>
   <div id="cursor-ring" class="cursor-ring"></div>
 
-  <!-- App Wrapper Layer -->
+  <!-- Main UI Shell -->
   <div class="app-layout">
 
     <!-- Top Navigation -->
@@ -42,7 +45,7 @@
 
         <div class="nav-center-ticker">
           <span class="pulse-dot"></span>
-          <span class="ticker-text">SUB-ANGSTROM LIGAND DOCKING // 48,000 GPU PARTICLES</span>
+          <span class="ticker-text">60,000 GPU PARTICLES // SUB-ANGSTROM LIGAND DOCKING</span>
         </div>
 
         <div class="nav-meta">
@@ -51,18 +54,17 @@
             <span id="sound-txt">AUDIO: ON</span>
           </button>
           <button class="btn-primary" onclick="openPortal()">
-            <span>Clinical Access &rarr;</span>
+            <span>Clinical Pipeline Access &rarr;</span>
           </button>
         </div>
       </div>
     </header>
 
-    <!-- Hero Viewport -->
+    <!-- Main Hero Viewport -->
     <main class="hero-viewport">
-      
       <div class="hero-grid">
         
-        <!-- Left Editorial Narrative -->
+        <!-- Left Column: Editorial & Interactive Drug Discovery -->
         <div class="hero-left-content">
           
           <div class="kicker-pill">
@@ -77,12 +79,12 @@
           </h1>
 
           <p class="hero-summary">
-            Synthesizing sub-angstrom structural biology with quantum binding kinetics to engineer orally bioavailable small-molecule tablets and antisense oligonucleotides.
+            Engineering orally bioavailable small-molecule tablets, antisense oligonucleotides, and CRISPR prime complexes that selectively dock into genomic loci with sub-nanomolar binding affinity.
           </p>
 
           <!-- Interactive Drug Tablet Shelf -->
           <div class="drug-shelf">
-            <div class="shelf-label">ACTIVE THERAPEUTIC MOLECULE (CLICK TO DOCK)</div>
+            <div class="shelf-label">SELECT THERAPEUTIC CANDIDATE (CLICK TO DOCK)</div>
             <div class="shelf-grid">
               
               <button class="shelf-card active" onclick="dockTherapeutic('trikafta')">
@@ -124,20 +126,20 @@
             </div>
           </div>
 
-          <!-- Nucleotide Sequence Matrix -->
+          <!-- Interactive Sequence Nucleotide Track -->
           <div class="seq-editor-box">
             <div class="seq-box-head">
               <span class="seq-title">CODON SEQUENCE TRACK // 5' &rarr; 3' SENSE STRAND</span>
-              <span class="seq-gc">GC: <strong id="gc-val">58.3%</strong></span>
+              <span class="seq-gc">GC CONTENT: <strong id="gc-val">58.3%</strong></span>
             </div>
 
             <div class="codons-strip" id="codons-strip">
-              <!-- Rendered dynamically via app.js -->
+              <!-- Rendered via app.js -->
             </div>
 
             <div class="seq-action-row">
               <button class="btn-action-ghost" onclick="triggerDockingAnimation()">
-                🧪 Dock Ligand into Major Groove
+                🧪 Dock Drug Ligand into Major Groove
               </button>
               <button class="btn-action-ghost" onclick="injectMutation()">
                 ⚡ Inject Pathogenic Variant
@@ -150,7 +152,7 @@
 
         </div>
 
-        <!-- Right Telemetry Panel -->
+        <!-- Right Column: Real-Time Telemetry & Formulation Data -->
         <div class="hero-right-content">
           
           <div class="telemetry-panel">
@@ -162,7 +164,7 @@
               <div class="panel-badge" id="dock-badge">WILDTYPE RESTING</div>
             </div>
 
-            <!-- Dynamic Waveform Plotter -->
+            <!-- Dynamic 2D Signal Plotter -->
             <div class="waveform-container">
               <canvas id="waveform-canvas" width="340" height="80"></canvas>
             </div>
@@ -183,7 +185,7 @@
             </div>
           </div>
 
-          <!-- Active Tablet Formulation Card -->
+          <!-- Active Formulation Card -->
           <div class="formulation-panel">
             <div class="form-tag">ACTIVE FORMULATION PROFILE</div>
             <div class="form-title" id="drug-title">Elexacaftor-01 (100mg Solid Oral Tablet)</div>
@@ -200,24 +202,7 @@
         </div>
 
       </div>
-
     </main>
-
-    <!-- Subtle Viewport Controls -->
-    <div class="floating-controls">
-      <div class="control-hint">
-        <span class="k-badge">DRAG</span> 360&deg; Orbit Perspective
-      </div>
-      <div class="control-sep"></div>
-      <div class="control-hint">
-        <span class="k-badge">SCROLL</span> Zoom Sub-Angstrom
-      </div>
-      <div class="control-sep"></div>
-      <div class="control-btns">
-        <button class="c-btn" id="orbit-btn" onclick="toggleAutoOrbit()">Pause Orbit</button>
-        <button class="c-btn" onclick="resetPerspective()">Reset Perspective</button>
-      </div>
-    </div>
 
     <!-- Section 02: Pipeline -->
     <section class="content-block">
@@ -350,6 +335,6 @@
     </div>
   </div>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=2.4.1"></script>
 </body>
 </html>
