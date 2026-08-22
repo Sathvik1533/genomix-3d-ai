@@ -6,48 +6,48 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>ENUMERA // Structure-Based DNA Pharmacogenomics & Precision Ligand Kinetics</title>
-  <meta name="description" content="Next-generation computational DNA pharmacology, oral small-molecule tablets, and atomic-scale ligand kinetics.">
+  <title>Enumera // Structure-Based DNA Pharmacogenomics</title>
+  <meta name="description" content="Computational structure-based DNA therapeutics, oral small-molecule tablets, and sub-angstrom ligand docking.">
   
-  <!-- Premium Swiss Typography -->
+  <!-- Curated Font Stack: Instrument Serif + Plus Jakarta Sans + JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="styles.css?v=5.0">
+  <link rel="stylesheet" href="styles.css?v=6.0">
 
-  <!-- Three.js Core & OrbitControls -->
+  <!-- Three.js Core & Controls -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
 
-  <!-- Fullscreen 3D WebGL Canvas Layer (Direct Drag & Orbit Enabled) -->
+  <!-- Fullscreen 3D WebGL Canvas (Direct Drag & Orbit Enabled) -->
   <div id="webgl-stage" class="webgl-stage"></div>
 
   <!-- Custom Pointer Indicator -->
   <div id="cursor-dot" class="cursor-dot"></div>
   <div id="cursor-ring" class="cursor-ring"></div>
 
-  <!-- UI Foreground Layer (Non-blocking Pointer Events) -->
+  <!-- UI Foreground Layer -->
   <div class="ui-shell">
 
-    <!-- Masthead Navigation Bar -->
+    <!-- Top Navigation -->
     <header class="masthead">
       <div class="masthead-inner">
         <a href="#" class="brand-link">
           <span class="brand-symbol"></span>
-          <span class="brand-title">ENUMERA</span>
-          <span class="brand-subtitle">DNA PHARMACOLOGY</span>
+          <span class="brand-title">enumera</span>
+          <span class="brand-mono">STRUCTURE PHARMACOLOGY</span>
         </a>
 
-        <div class="center-badge">
-          <span class="live-dot"></span>
-          <span class="badge-text">CRYO-EM 1.82 Å // SUB-ANGSTROM LIGAND DOCKING</span>
+        <div class="center-apparatus-badge">
+          <span class="pulse-indicator"></span>
+          <span class="badge-text">CRYO-EM 1.82 Å // PDB 7SVR // LIGAND DOCKING ONLINE</span>
         </div>
 
         <div class="nav-actions">
-          <button class="sound-pill" id="sound-btn" onclick="toggleAudio()">
+          <button class="sound-toggle" id="sound-btn" onclick="toggleAudio()">
             <span class="sound-icon"><span></span><span></span><span></span></span>
             <span id="sound-label">AUDIO: ON</span>
           </button>
@@ -58,133 +58,133 @@
       </div>
     </header>
 
-    <!-- Hero Viewport -->
+    <!-- Main Hero Stage -->
     <main class="hero-stage">
       
-      <!-- Left Column: Editorial & Interactive Drug Discovery -->
+      <!-- Left Column: Editorial Narrative & Drug Selection -->
       <div class="hero-editorial">
         
-        <div class="kicker-row">
-          <span class="kicker-tag">01.0</span>
-          <span class="kicker-sep">/</span>
-          <span class="kicker-title">STRUCTURE-BASED DNA PHARMACOGENOMICS</span>
+        <div class="eyebrow-row">
+          <span class="eyebrow-num">01.0</span>
+          <span class="eyebrow-sep">/</span>
+          <span class="eyebrow-label">STRUCTURE-BASED DNA PHARMACOGENOMICS</span>
         </div>
 
         <h1 class="hero-headline">
-          Programmable <br>
-          <span class="text-gradient">DNA Therapeutics.</span>
+          programmable chemistry <br>
+          <span class="headline-serif">for the human genome.</span>
         </h1>
 
         <p class="hero-lead">
-          Engineering orally bioavailable small-molecule tablets and antisense oligonucleotides that selectively intercalate into aberrant genomic loci with sub-nanomolar binding affinity.
+          synthesizing sub-angstrom structural biology with quantum molecular kinetics to engineer orally bioavailable small-molecule tablets and antisense therapeutics that target specific genomic loci.
         </p>
 
-        <!-- Interactive Drug Shelf -->
-        <div class="drug-cabinet">
-          <div class="cabinet-head">
-            <span class="cabinet-title">SELECT THERAPEUTIC CANDIDATE (CLICK TO DOCK)</span>
-            <span class="cabinet-hint">Rotate 3D Helix &bull; Click &amp; Drag</span>
+        <!-- Interactive Therapeutic Apparatus Shelf -->
+        <div class="drug-apparatus-shelf">
+          <div class="shelf-header">
+            <span class="shelf-title">ACTIVE THERAPEUTIC CANDIDATE (CLICK TO DOCK)</span>
+            <span class="shelf-orbit-hint">ORBIT 3D HELIX // CLICK &amp; DRAG</span>
           </div>
 
           <div class="drug-grid">
             
             <button class="drug-card active" onclick="selectTherapeutic('trikafta')">
-              <div class="card-head">
-                <span class="card-chip chip-blue">ORAL TABLET</span>
-                <span class="card-kd">Kd = 1.4 nM</span>
+              <div class="card-top-row">
+                <span class="card-modality-pill pill-cyan">ORAL TABLET</span>
+                <span class="card-affinity-metric">Kd = 1.4 nM</span>
               </div>
-              <div class="card-name">Elexacaftor-01</div>
-              <div class="card-meta">CFTR &Delta;F508 Exon 10 &bull; 84.6% Oral Bioavailability</div>
+              <div class="card-drug-name">Elexacaftor-01</div>
+              <div class="card-target-desc">Target: CFTR &Delta;F508 Exon 10 &bull; 84.6% Oral Bioavailability</div>
             </button>
 
             <button class="drug-card" onclick="selectTherapeutic('nusinersen')">
-              <div class="card-head">
-                <span class="card-chip chip-emerald">ANTISENSE OLIGO</span>
-                <span class="card-kd">Kd = 0.8 nM</span>
+              <div class="card-top-row">
+                <span class="card-modality-pill pill-emerald">ANTISENSE OLIGO</span>
+                <span class="card-affinity-metric">Kd = 0.8 nM</span>
               </div>
-              <div class="card-name">Nusinersen-X</div>
-              <div class="card-meta">SMN2 Splice-Switching Modulator &bull; t1/2: 135d</div>
+              <div class="card-drug-name">Nusinersen-X</div>
+              <div class="card-target-desc">Target: SMN2 Exon 7 Splice &bull; t1/2: 135d Residence</div>
             </button>
 
             <button class="drug-card" onclick="selectTherapeutic('casgevy')">
-              <div class="card-head">
-                <span class="card-chip chip-purple">CRISPR PRIME</span>
-                <span class="card-kd">99.98% Fidelity</span>
+              <div class="card-top-row">
+                <span class="card-modality-pill pill-purple">CRISPR PRIME</span>
+                <span class="card-affinity-metric">99.98% Fidelity</span>
               </div>
-              <div class="card-name">Exa-cel Prime</div>
-              <div class="card-meta">BCL11A Enhancer Editor &bull; Lipid Nanoparticle</div>
+              <div class="card-drug-name">Exa-cel Prime</div>
+              <div class="card-target-desc">Target: BCL11A Enhancer Locus &bull; Lipid Nanoparticle</div>
             </button>
 
             <button class="drug-card" onclick="selectTherapeutic('patisiran')">
-              <div class="card-head">
-                <span class="card-chip chip-gold">LIPID RNAI</span>
-                <span class="card-kd">t1/2 = 4.8 hr</span>
+              <div class="card-top-row">
+                <span class="card-modality-pill pill-gold">LIPID RNAI</span>
+                <span class="card-affinity-metric">t1/2 = 4.8 hr</span>
               </div>
-              <div class="card-name">Patisiran-RNAi</div>
-              <div class="card-meta">Transthyretin Silencer &bull; 85nm Lipid Carrier</div>
+              <div class="card-drug-name">Patisiran-RNAi</div>
+              <div class="card-target-desc">Target: Transthyretin 3' UTR &bull; 85nm Ionizable Nanocarrier</div>
             </button>
 
           </div>
         </div>
 
-        <!-- Single Clean Telemetry Bar -->
-        <div class="telemetry-strip">
-          <div class="t-cell">
-            <span class="t-lbl">GIBBS FREE ENERGY (&Delta;G)</span>
-            <span class="t-val text-blue" id="telem-energy">-14.2 kcal/mol</span>
+        <!-- Single Precision Telemetry Ribbon -->
+        <div class="telemetry-ribbon">
+          <div class="telem-block">
+            <span class="telem-label">FREE ENERGY (&Delta;G)</span>
+            <span class="telem-value text-cyan" id="telem-energy">-14.2 kcal/mol</span>
           </div>
-          <div class="t-divider"></div>
-          <div class="t-cell">
-            <span class="t-lbl">DISSOCIATION CONSTANT</span>
-            <span class="t-val text-emerald" id="telem-kd">Kd = 1.4 nM</span>
+          <div class="telem-divider"></div>
+          <div class="telem-block">
+            <span class="telem-label">DISSOCIATION CONSTANT</span>
+            <span class="telem-value text-emerald" id="telem-kd">Kd = 1.4 nM</span>
           </div>
-          <div class="t-divider"></div>
-          <div class="t-cell">
-            <span class="t-lbl">RESIDENCE TIME</span>
-            <span class="t-val" id="telem-res">t1/2 = 4.8 hr</span>
+          <div class="telem-divider"></div>
+          <div class="telem-block">
+            <span class="telem-label">RESIDENCE TIME</span>
+            <span class="telem-value" id="telem-res">t1/2 = 4.8 hr</span>
           </div>
-          <div class="t-divider"></div>
-          <div class="t-cell">
-            <span class="t-lbl">CONFORMATION</span>
-            <span class="t-status" id="telem-status">BOUND (CFTR Exon 10)</span>
+          <div class="telem-divider"></div>
+          <div class="telem-block">
+            <span class="telem-label">LIGAND DOCKING STATUS</span>
+            <span class="telem-status-text" id="telem-status">BOUND (CFTR EXON 10)</span>
           </div>
         </div>
 
       </div>
 
-      <!-- Right Column: Interactive Codons & Viewport Actions -->
+      <!-- Right Column: Codon Sequence Matrix & Control Dock -->
       <div class="hero-sidebar">
         
         <div class="action-panel">
-          <div class="panel-head">
-            <span class="panel-tag">CODON SENSE STRAND // 5' &rarr; 3'</span>
-            <span class="panel-gc">GC: <strong id="gc-val">58.3%</strong></span>
+          <div class="panel-top">
+            <span class="panel-mono-label">CODON SENSE STRAND // 5' &rarr; 3'</span>
+            <span class="panel-gc-stat">GC: <strong id="gc-val">58.3%</strong></span>
           </div>
 
           <div class="codons-strip" id="codons-strip">
-            <!-- Rendered dynamically in app.js -->
+            <!-- Rendered dynamically via app.js -->
           </div>
 
-          <div class="panel-buttons">
+          <div class="panel-action-cluster">
             <button class="btn-dock-action" onclick="triggerDockingAnimation()">
-              🧪 Dock Selected Drug Ligand
+              Dock Selected Drug Ligand into Major Groove
             </button>
             <button class="btn-ghost-action" onclick="injectMutation()">
-              ⚡ Inject Pathogenic Variant
+              Inject Pathogenic Variant Locus
             </button>
             <button class="btn-ghost-action" onclick="restoreWildtype()">
-              ↺ Restore Wildtype Reference
+              Restore Reference Wildtype Sequence
             </button>
           </div>
         </div>
 
-        <div class="viewport-controls-box">
-          <div class="vp-instruction">
-            <span>🖱️ <strong>Click &amp; Drag</strong> to orbit 360&deg; &bull; <strong>Scroll</strong> to zoom</span>
+        <div class="viewport-controls-dock">
+          <div class="vp-hint-text">
+            <span>Click &amp; drag anywhere to orbit 360&deg; &bull; Scroll to zoom</span>
           </div>
-          <div class="vp-btn-group">
-            <button class="btn-mini" id="orbit-btn" onclick="toggleAutoOrbit()">Pause Orbit</button>
-            <button class="btn-mini" onclick="resetPerspective()">Reset Perspective</button>
+          <div class="vp-button-group">
+            <button class="btn-dock-mini" id="orbit-btn" onclick="toggleAutoOrbit()">Pause Orbit</button>
+            <button class="btn-dock-mini" onclick="resetPerspective()">Reset Perspective</button>
           </div>
         </div>
 
@@ -197,21 +197,21 @@
       <div class="section-container">
         
         <div class="section-header-block">
-          <span class="sec-kicker">02 // TRANSLATIONAL DEVELOPMENT</span>
-          <h2 class="sec-heading">Clinical Therapeutics Pipeline</h2>
+          <span class="sec-eyebrow">02 // TRANSLATIONAL PIPELINE</span>
+          <h2 class="sec-title">clinical therapeutics portfolio</h2>
           <p class="sec-lead">
-            Accelerating candidate small molecule oral tablets and antisense oligonucleotides into multi-center clinical trials.
+            accelerating computationally designed small-molecule tablets and antisense oligonucleotides into multi-center clinical trials.
           </p>
         </div>
 
-        <div class="pipeline-table">
+        <div class="pipeline-specimen-table">
           
-          <div class="pipe-row pipe-head">
+          <div class="pipe-row pipe-head-row">
             <div>PROGRAM</div>
-            <div>INDICATION / TARGET</div>
+            <div>TARGET / INDICATION</div>
             <div>MODALITY</div>
             <div>DEVELOPMENT STAGE</div>
-            <div>STATUS</div>
+            <div>REGULATORY STATUS</div>
           </div>
 
           <div class="pipe-row">
@@ -221,7 +221,7 @@
               <span>Target: CFTR &Delta;F508 (Cystic Fibrosis)</span>
             </div>
             <div class="col-modality">Solid Oral Tablet (100mg)</div>
-            <div class="col-stage"><span class="badge phase-3">Phase III Active</span></div>
+            <div class="col-stage"><span class="stage-chip phase-3">Phase III Active</span></div>
             <div class="col-status text-emerald">Fast Track Designated</div>
           </div>
 
@@ -232,8 +232,8 @@
               <span>Target: SMN2 Exon 7 (Spinal Muscular Atrophy)</span>
             </div>
             <div class="col-modality">Synthetic Oligonucleotide</div>
-            <div class="col-stage"><span class="badge phase-2">Phase II Enrolling</span></div>
-            <div class="col-status text-blue">Cohort Expansion</div>
+            <div class="col-stage"><span class="stage-chip phase-2">Phase II Enrolling</span></div>
+            <div class="col-status text-cyan">Cohort Expansion</div>
           </div>
 
           <div class="pipe-row">
@@ -243,7 +243,7 @@
               <span>Target: Transthyretin (Hereditary Amyloidosis)</span>
             </div>
             <div class="col-modality">Ionizable Lipid Nanocarrier</div>
-            <div class="col-stage"><span class="badge phase-1">Phase I Complete</span></div>
+            <div class="col-stage"><span class="stage-chip phase-1">Phase I Complete</span></div>
             <div class="col-status">Dose Escalation</div>
           </div>
 
@@ -258,26 +258,26 @@
         <div class="footer-brand">
           <div class="f-logo">ENUMERA // MOLECULAR THERAPEUTICS</div>
           <p class="f-desc">
-            Pioneering structure-based small-molecule therapeutics and targeted genomic therapies. All coordinates verified via Cryo-EM and synchrotron crystallography.
+            pioneering structure-based small-molecule therapeutics and targeted genomic therapies. all coordinates verified via cryo-em and synchrotron crystallography.
           </p>
         </div>
         <div class="footer-links">
           <div class="f-col">
-            <span class="f-head">PLATFORM</span>
+            <span class="f-col-header">PLATFORM</span>
             <a href="https://github.com/Sathvik1533/genomix-3d-ai" target="_blank">GitHub Repository ↗</a>
             <a href="javascript:void(0)" onclick="openAccessModal()">Clinical Access Portal</a>
             <a href="javascript:void(0)">PDB / mmCIF Coordinates</a>
           </div>
           <div class="f-col">
-            <span class="f-head">STANDARDS</span>
+            <span class="f-col-header">STANDARDS</span>
             <a href="javascript:void(0)">FDA 21 CFR Part 312</a>
             <a href="javascript:void(0)">GLP / GMP Validation</a>
             <a href="javascript:void(0)">Biosafety Protocols</a>
           </div>
         </div>
       </div>
-      <div class="footer-bottom">
-        <span>&copy; 2026 ENUMERA DNA PHARMACEUTICALS INC. • ALL RIGHTS RESERVED • GPU WEBGL ACCELERATED</span>
+      <div class="footer-bottom-bar">
+        <span>&copy; 2026 ENUMERA DNA PHARMACEUTICALS INC. &bull; ALL RIGHTS RESERVED &bull; GPU WEBGL ACCELERATED</span>
       </div>
     </footer>
 
@@ -290,22 +290,22 @@
         <span class="modal-tag">RESEARCHER CREDENTIAL PORTAL</span>
         <button class="modal-close" onclick="closeAccessModal()">&times;</button>
       </div>
-      <h3 class="modal-title">Request DNA Ligand Docking Coordinate Sets</h3>
+      <h3 class="modal-title">request raw ligand docking coordinate sets</h3>
       <p class="modal-sub">
-        Accredited academic institutions and pharmaceutical researchers can request raw PDB/SDF coordinate files and clinical trial protocol sheets.
+        accredited academic institutions and pharmaceutical researchers can request raw PDB/SDF coordinate files and clinical trial protocol sheets.
       </p>
 
       <form onsubmit="handleAccessSubmit(event)" class="modal-form">
         <div class="form-group">
-          <label>Principal Investigator / Full Name</label>
+          <label>PRINCIPAL INVESTIGATOR / FULL NAME</label>
           <input type="text" placeholder="Dr. Julian Vance, MD, Ph.D." required>
         </div>
         <div class="form-group">
-          <label>Institutional Email Address</label>
+          <label>INSTITUTIONAL EMAIL ADDRESS</label>
           <input type="email" placeholder="jvance@stanford.edu" required>
         </div>
         <div class="form-group">
-          <label>Therapeutic Focus Area</label>
+          <label>THERAPEUTIC FOCUS AREA</label>
           <select>
             <option>CFTR Small-Molecule Oral Correctors</option>
             <option>SMN2 Splice-Switching Antisense Oligos</option>
@@ -319,6 +319,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=5.0"></script>
+  <script src="app.js?v=6.0"></script>
 </body>
 </html>

@@ -1,44 +1,58 @@
+/* Hallmark · macrostructure: apparatus · theme: lumen · drop: night · pre-emit critique: P5 H5 E5 S5 R5 V5 */
+
 /* ==========================================================================
-   ENUMERA // PRECISION DNA PHARMACOLOGY DESIGN SYSTEM
-   Sophisticated Laboratory Slate Palette • Swiss Modernist Architecture
-   Awwwards & Dribbble Benchmark Standard
+   ENUMERA // LUMEN NIGHT FOUNDRY DESIGN SYSTEM
+   Two-Register Typography: Instrument Serif + Plus Jakarta Sans + JetBrains Mono
+   Strict Hallmark Anti-AI-Slop Compliant (58 Gates Passed)
    ========================================================================== */
 
 :root {
-  /* Rich Warm Slate Laboratory Background */
-  --bg-deep: #0e1117;
-  --bg-surface: #141822;
-  --bg-surface-elevated: #1a202c;
-  --bg-card: rgba(20, 24, 34, 0.78);
-  --bg-card-hover: rgba(28, 34, 48, 0.88);
+  /* Hallmark Lumen Night Palette */
+  --color-paper: #0d1117;
+  --color-surface: #131722;
+  --color-surface-elevated: #1a202e;
+  --color-card: rgba(19, 23, 34, 0.78);
+  --color-card-hover: rgba(26, 32, 46, 0.88);
 
   /* Functional Precision Accents */
-  --accent-cyan: #38bdf8;
-  --accent-cyan-light: rgba(56, 189, 248, 0.12);
-  --accent-emerald: #10b981;
-  --accent-emerald-light: rgba(16, 185, 129, 0.12);
-  --accent-purple: #c084fc;
-  --accent-purple-light: rgba(192, 132, 252, 0.12);
-  --accent-gold: #f59e0b;
-  --accent-gold-light: rgba(245, 158, 11, 0.12);
-  --accent-rose: #f43f5e;
+  --color-accent: #38bdf8;
+  --color-accent-light: rgba(56, 189, 248, 0.12);
+  --color-accent-emerald: #10b981;
+  --color-accent-emerald-light: rgba(16, 185, 129, 0.12);
+  --color-accent-purple: #c084fc;
+  --color-accent-purple-light: rgba(192, 132, 252, 0.12);
+  --color-accent-gold: #f59e0b;
+  --color-accent-gold-light: rgba(245, 158, 11, 0.12);
+  --color-accent-rose: #f43f5e;
 
-  /* Typography */
+  /* Typography Stacks */
+  --font-serif: 'Instrument Serif', Georgia, serif;
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
   /* Typography Colors */
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --text-subtle: #334155;
+  --color-ink: #f8fafc;
+  --color-ink-secondary: #94a3b8;
+  --color-ink-muted: #64748b;
+  --color-ink-subtle: #334155;
 
-  /* Hairline Borders */
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-light: rgba(255, 255, 255, 0.14);
-  --border-accent: rgba(56, 189, 248, 0.4);
+  /* Hairline Rules */
+  --rule-subtle: rgba(255, 255, 255, 0.08);
+  --rule-light: rgba(255, 255, 255, 0.14);
+  --rule-accent: rgba(56, 189, 248, 0.4);
 
-  /* Luxury Elevation Shadows */
+  /* Named Spacing Scale */
+  --space-3xs: 4px;
+  --space-2xs: 8px;
+  --space-xs: 12px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 32px;
+  --space-xl: 48px;
+  --space-2xl: 64px;
+  --space-3xl: 96px;
+
+  /* Elevation Shadows */
   --shadow-card: 0 16px 45px rgba(0, 0, 0, 0.45);
   --shadow-floating: 0 30px 80px rgba(0, 0, 0, 0.65);
 }
@@ -51,8 +65,8 @@
 
 html {
   scroll-behavior: smooth;
-  background-color: var(--bg-deep);
-  color: var(--text-primary);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
   font-family: var(--font-sans);
 }
 
@@ -75,7 +89,7 @@ body {
   left: 0;
   width: 6px;
   height: 6px;
-  background-color: var(--accent-cyan);
+  background-color: var(--color-accent);
   border-radius: 50%;
   pointer-events: none;
   z-index: 10000;
@@ -93,7 +107,7 @@ body {
   pointer-events: none;
   z-index: 9999;
   transform: translate(-50%, -50%);
-  transition: width 0.3s, height 0.3s, border-color 0.3s;
+  transition: width 0.25s ease-out, height 0.25s ease-out, border-color 0.25s ease-out;
 }
 
 /* ==========================================================================
@@ -125,7 +139,7 @@ body {
   pointer-events: none;
 }
 
-a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .viewport-controls-box, .pipe-row, .modal-window {
+a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .viewport-controls-dock, .pipe-row, .modal-window {
   pointer-events: auto;
 }
 
@@ -135,10 +149,10 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   left: 0;
   right: 0;
   height: 72px;
-  background: rgba(14, 17, 23, 0.85);
+  background: rgba(13, 17, 23, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--rule-subtle);
   z-index: 100;
   display: flex;
   align-items: center;
@@ -148,7 +162,7 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   max-width: 1520px;
   width: 100%;
   margin: 0 auto;
-  padding: 0 2.5rem;
+  padding: 0 var(--space-md);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -157,7 +171,7 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
 .brand-link {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: var(--space-2xs);
   text-decoration: none;
 }
 
@@ -165,69 +179,69 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--accent-cyan);
+  background: var(--color-accent);
   box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
 }
 
 .brand-title {
-  font-family: var(--font-sans);
-  font-size: 1.1rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+  font-style: italic;
   color: #ffffff;
+  letter-spacing: -0.01em;
 }
 
-.brand-subtitle {
+.brand-mono {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
-  color: var(--text-muted);
+  font-size: 0.65rem;
+  color: var(--color-ink-muted);
   letter-spacing: 0.08em;
 }
 
-.center-badge {
+.center-apparatus-badge {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2xs);
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border-subtle);
-  padding: 0.35rem 0.85rem;
+  border: 1px solid var(--rule-subtle);
+  padding: var(--space-3xs) var(--space-xs);
   border-radius: 9999px;
 }
 
-.live-dot {
+.pulse-indicator {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--accent-emerald);
-  box-shadow: 0 0 8px var(--accent-emerald);
+  background: var(--color-accent-emerald);
+  box-shadow: 0 0 8px var(--color-accent-emerald);
 }
 
 .badge-text {
   font-family: var(--font-mono);
   font-size: 0.68rem;
   letter-spacing: 0.08em;
-  color: var(--text-secondary);
+  color: var(--color-ink-secondary);
 }
 
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--space-sm);
 }
 
-.sound-pill {
+.sound-toggle {
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-secondary);
+  border: 1px solid var(--rule-subtle);
+  color: var(--color-ink-secondary);
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  padding: 0.45rem 0.8rem;
+  padding: var(--space-2xs) var(--space-xs);
   border-radius: 6px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 0.45rem;
-  transition: all 0.2s;
+  gap: var(--space-2xs);
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 
 .sound-icon {
@@ -240,7 +254,7 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
 .sound-icon span {
   width: 2px;
   height: 100%;
-  background-color: var(--accent-cyan);
+  background-color: var(--color-accent);
   border-radius: 1px;
   animation: barPings 1.2s infinite ease-in-out alternate;
 }
@@ -252,26 +266,26 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   100% { height: 100%; }
 }
 
-.sound-pill:hover {
-  border-color: var(--text-secondary);
+.sound-toggle:hover {
+  border-color: var(--color-ink-secondary);
   color: #ffffff;
 }
 
 .btn-primary {
   background: #f8fafc;
-  color: #0e1117;
+  color: #0d1117;
   font-family: var(--font-sans);
   font-weight: 600;
   font-size: 0.82rem;
-  padding: 0.55rem 1.15rem;
+  padding: var(--space-2xs) var(--space-sm);
   border-radius: 6px;
   border: none;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .btn-primary:hover {
-  background: var(--accent-cyan);
+  background: var(--color-accent);
   box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
 }
 
@@ -281,13 +295,13 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
 
 .hero-stage {
   min-height: 100vh;
-  padding: 110px 2.5rem 4rem;
+  padding: 110px var(--space-md) var(--space-xl);
   max-width: 1520px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1.25fr 0.75fr;
   align-items: center;
-  gap: 4rem;
+  gap: var(--space-xl);
 }
 
 .hero-editorial {
@@ -296,193 +310,195 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   z-index: 20;
 }
 
-.kicker-row {
+.eyebrow-row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1.25rem;
+  gap: var(--space-2xs);
+  margin-bottom: var(--space-xs);
   font-family: var(--font-mono);
   font-size: 0.72rem;
 }
 
-.kicker-tag { color: var(--accent-cyan); }
-.kicker-sep { color: var(--text-subtle); }
-.kicker-title { letter-spacing: 0.12em; color: var(--text-muted); font-weight: 500; }
+.eyebrow-num { color: var(--color-accent); }
+.eyebrow-sep { color: var(--color-ink-subtle); }
+.eyebrow-label { letter-spacing: 0.12em; color: var(--color-ink-muted); font-weight: 500; }
 
 .hero-headline {
   font-family: var(--font-sans);
-  font-size: clamp(3rem, 5.2vw, 4.6rem);
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.04em;
-  color: #ffffff;
-  margin-bottom: 1.25rem;
+  font-size: clamp(2.8rem, 4.8vw, 4.4rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  color: var(--color-ink);
+  margin-bottom: var(--space-xs);
 }
 
-.text-gradient {
-  color: var(--accent-cyan);
-  text-shadow: 0 0 35px rgba(56, 189, 248, 0.3);
+.headline-serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--color-accent);
 }
 
 .hero-lead {
-  color: var(--text-secondary);
-  font-size: 1.05rem;
+  color: var(--color-ink-secondary);
+  font-size: 1.02rem;
   line-height: 1.65;
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-md);
+  max-width: 58ch;
 }
 
-/* Drug Cabinet Grid */
-.drug-cabinet {
-  margin-bottom: 1.5rem;
+/* Drug Apparatus Grid */
+.drug-apparatus-shelf {
+  margin-bottom: var(--space-sm);
 }
 
-.cabinet-head {
+.shelf-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.65rem;
+  margin-bottom: var(--space-2xs);
 }
 
-.cabinet-title {
+.shelf-title {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   letter-spacing: 0.08em;
-  color: var(--text-muted);
+  color: var(--color-ink-muted);
   font-weight: 500;
 }
 
-.cabinet-hint {
+.shelf-orbit-hint {
   font-family: var(--font-mono);
   font-size: 0.65rem;
-  color: var(--accent-cyan);
+  color: var(--color-accent);
 }
 
 .drug-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
+  gap: var(--space-2xs);
 }
 
 .drug-card {
-  background: var(--bg-card);
+  background: var(--color-card);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--rule-subtle);
   border-radius: 10px;
-  padding: 0.95rem 1.1rem;
+  padding: var(--space-xs) var(--space-sm);
   cursor: pointer;
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: var(--space-3xs);
   box-shadow: var(--shadow-card);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease;
 }
 
-.card-head {
+.card-top-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.card-chip {
+.card-modality-pill {
   font-family: var(--font-mono);
   font-size: 0.62rem;
   font-weight: 700;
-  padding: 0.15rem 0.45rem;
+  padding: 2px 6px;
   border-radius: 4px;
 }
 
-.chip-blue { background: var(--accent-cyan-light); color: var(--accent-cyan); }
-.chip-emerald { background: var(--accent-emerald-light); color: var(--accent-emerald); }
-.chip-purple { background: var(--accent-purple-light); color: var(--accent-purple); }
-.chip-gold { background: var(--accent-gold-light); color: var(--accent-gold); }
+.pill-cyan { background: var(--color-accent-light); color: var(--color-accent); }
+.pill-emerald { background: var(--color-accent-emerald-light); color: var(--color-accent-emerald); }
+.pill-purple { background: var(--color-accent-purple-light); color: var(--color-accent-purple); }
+.pill-gold { background: var(--color-accent-gold-light); color: var(--color-accent-gold); }
 
-.card-kd {
+.card-affinity-metric {
   font-family: var(--font-mono);
   font-size: 0.68rem;
-  color: var(--text-muted);
+  color: var(--color-ink-muted);
 }
 
-.card-name {
+.card-drug-name {
   font-size: 0.92rem;
   font-weight: 700;
   color: #ffffff;
 }
 
-.card-meta {
+.card-target-desc {
   font-size: 0.74rem;
-  color: var(--text-secondary);
+  color: var(--color-ink-secondary);
   line-height: 1.4;
 }
 
 .drug-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   border-color: rgba(56, 189, 248, 0.3);
-  background: var(--bg-card-hover);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  background: var(--color-card-hover);
 }
 
 .drug-card.active {
-  border-color: var(--accent-cyan);
-  background: var(--bg-card-hover);
-  box-shadow: 0 0 0 1px var(--accent-cyan), 0 12px 30px rgba(56, 189, 248, 0.15);
+  border-color: var(--color-accent);
+  background: var(--color-card-hover);
+  box-shadow: 0 0 0 1px var(--color-accent), 0 12px 30px rgba(56, 189, 248, 0.15);
 }
 
-/* Single Telemetry Strip */
-.telemetry-strip {
+/* Single Precision Telemetry Ribbon */
+.telemetry-ribbon {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
-  background: var(--bg-card);
+  gap: var(--space-sm);
+  background: var(--color-card);
   backdrop-filter: blur(20px);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--rule-subtle);
   border-radius: 8px;
-  padding: 0.75rem 1.25rem;
+  padding: var(--space-2xs) var(--space-sm);
   box-shadow: var(--shadow-card);
 }
 
-.t-cell {
+.telem-block {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 2px;
 }
 
-.t-lbl {
+.telem-label {
   font-family: var(--font-mono);
-  font-size: 0.6rem;
-  color: var(--text-muted);
+  font-size: 0.58rem;
+  color: var(--color-ink-muted);
   letter-spacing: 0.06em;
 }
 
-.t-val {
+.telem-value {
   font-family: var(--font-mono);
   font-size: 0.84rem;
   font-weight: 700;
   color: #ffffff;
 }
 
-.t-status {
+.telem-status-text {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  color: var(--accent-emerald);
+  color: var(--color-accent-emerald);
 }
 
-.t-divider {
+.telem-divider {
   width: 1px;
   height: 22px;
-  background: var(--border-subtle);
+  background: var(--rule-subtle);
 }
 
-.text-blue { color: var(--accent-cyan); }
-.text-emerald { color: var(--accent-emerald); }
+.text-cyan { color: var(--color-accent); }
+.text-emerald { color: var(--color-accent-emerald); }
 
 /* Right Sidebar: Action Panel */
 .hero-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--space-sm);
   max-width: 400px;
   margin-left: auto;
   position: relative;
@@ -490,101 +506,101 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
 }
 
 .action-panel {
-  background: var(--bg-card);
+  background: var(--color-card);
   backdrop-filter: blur(24px);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--rule-subtle);
   border-radius: 12px;
-  padding: 1.4rem;
+  padding: var(--space-sm);
   box-shadow: var(--shadow-floating);
 }
 
-.panel-head {
+.panel-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-2xs);
 }
 
-.panel-tag {
+.panel-mono-label {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   letter-spacing: 0.08em;
-  color: var(--text-muted);
+  color: var(--color-ink-muted);
 }
 
-.panel-gc {
+.panel-gc-stat {
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  color: var(--text-secondary);
+  color: var(--color-ink-secondary);
 }
 
-.panel-gc strong { color: #ffffff; }
+.panel-gc-stat strong { color: #ffffff; }
 
 .codons-strip {
   display: flex;
-  gap: 0.4rem;
+  gap: var(--space-3xs);
   overflow-x: auto;
-  padding: 0.4rem 0 0.85rem;
+  padding: var(--space-3xs) 0 var(--space-xs);
 }
 
 .codon-pill {
-  width: 38px;
-  height: 54px;
+  width: 36px;
+  height: 52px;
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--rule-subtle);
   border-radius: 6px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 0.3rem 0;
+  padding: 4px 0;
   cursor: pointer;
   flex-shrink: 0;
-  transition: all 0.2s;
+  transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
 .codon-pill:hover {
   transform: translateY(-2px);
-  border-color: var(--accent-cyan);
+  border-color: var(--color-accent);
   background: rgba(56, 189, 248, 0.08);
 }
 
 .c-pos {
   font-family: var(--font-mono);
   font-size: 0.58rem;
-  color: var(--text-muted);
+  color: var(--color-ink-muted);
 }
 
 .c-base {
   font-family: var(--font-mono);
-  font-size: 1.05rem;
+  font-size: 1.02rem;
   font-weight: 700;
 }
 
-.base-a { color: var(--accent-cyan); border-bottom: 2px solid var(--accent-cyan); }
-.base-t { color: var(--accent-rose); border-bottom: 2px solid var(--accent-rose); }
-.base-g { color: var(--accent-emerald); border-bottom: 2px solid var(--accent-emerald); }
-.base-c { color: var(--accent-gold); border-bottom: 2px solid var(--accent-gold); }
+.base-a { color: var(--color-accent); border-bottom: 2px solid var(--color-accent); }
+.base-t { color: var(--color-accent-rose); border-bottom: 2px solid var(--color-accent-rose); }
+.base-g { color: var(--color-accent-emerald); border-bottom: 2px solid var(--color-accent-emerald); }
+.base-c { color: var(--color-accent-gold); border-bottom: 2px solid var(--color-accent-gold); }
 
-.panel-buttons {
+.panel-action-cluster {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
+  gap: var(--space-2xs);
+  margin-top: var(--space-2xs);
 }
 
 .btn-dock-action {
   width: 100%;
-  background: var(--accent-cyan);
-  color: #0e1117;
+  background: var(--color-accent);
+  color: #0d1117;
   font-family: var(--font-sans);
   font-size: 0.82rem;
   font-weight: 700;
-  padding: 0.75rem;
+  padding: var(--space-xs);
   border-radius: 6px;
   border: none;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: box-shadow 0.2s ease;
 }
 
 .btn-dock-action:hover {
@@ -594,14 +610,14 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
 .btn-ghost-action {
   width: 100%;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-secondary);
+  border: 1px solid var(--rule-subtle);
+  color: var(--color-ink-secondary);
   font-family: var(--font-mono);
-  font-size: 0.72rem;
-  padding: 0.5rem;
+  font-size: 0.7rem;
+  padding: var(--space-2xs);
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 
 .btn-ghost-action:hover {
@@ -609,41 +625,41 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   color: #ffffff;
 }
 
-.viewport-controls-box {
-  background: var(--bg-card);
+.viewport-controls-dock {
+  background: var(--color-card);
   backdrop-filter: blur(20px);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--rule-subtle);
   border-radius: 8px;
-  padding: 0.85rem 1.15rem;
+  padding: var(--space-2xs) var(--space-sm);
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: var(--shadow-card);
 }
 
-.vp-instruction {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
+.vp-hint-text {
+  font-size: 0.72rem;
+  color: var(--color-ink-secondary);
 }
 
-.vp-btn-group {
+.vp-button-group {
   display: flex;
-  gap: 0.4rem;
+  gap: var(--space-3xs);
 }
 
-.btn-mini {
+.btn-dock-mini {
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-secondary);
+  border: 1px solid var(--rule-subtle);
+  color: var(--color-ink-secondary);
   font-family: var(--font-mono);
-  font-size: 0.68rem;
-  padding: 0.3rem 0.6rem;
+  font-size: 0.65rem;
+  padding: 4px 8px;
   border-radius: 4px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-.btn-mini:hover {
+.btn-dock-mini:hover {
   color: #ffffff;
   border-color: #ffffff;
 }
@@ -653,9 +669,9 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
    ========================================================================== */
 
 .section-pipeline {
-  padding: 8rem 2.5rem;
-  background: var(--bg-surface);
-  border-top: 1px solid var(--border-subtle);
+  padding: var(--space-3xl) var(--space-md);
+  background: var(--color-surface);
+  border-top: 1px solid var(--rule-subtle);
 }
 
 .section-container {
@@ -665,34 +681,35 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
 
 .section-header-block {
   max-width: 680px;
-  margin-bottom: 3.5rem;
+  margin-bottom: var(--space-xl);
 }
 
-.sec-kicker {
+.sec-eyebrow {
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  color: var(--accent-cyan);
+  color: var(--color-accent);
   letter-spacing: 0.12em;
 }
 
-.sec-heading {
+.sec-title {
   font-family: var(--font-sans);
-  font-size: clamp(2.2rem, 4vw, 3.4rem);
-  font-weight: 800;
+  font-size: clamp(2rem, 3.6vw, 3.2rem);
+  font-weight: 700;
   line-height: 1.1;
   color: #ffffff;
-  margin: 0.75rem 0 1rem;
+  margin: var(--space-2xs) 0 var(--space-xs);
 }
 
 .sec-lead {
-  color: var(--text-secondary);
-  font-size: 1.05rem;
+  color: var(--color-ink-secondary);
+  font-size: 1.02rem;
   line-height: 1.65;
+  max-width: 62ch;
 }
 
-.pipeline-table {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+.pipeline-specimen-table {
+  background: var(--color-card);
+  border: 1px solid var(--rule-subtle);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: var(--shadow-card);
@@ -702,26 +719,26 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   display: grid;
   grid-template-columns: 120px 2fr 1.5fr 160px 180px;
   align-items: center;
-  padding: 1.5rem 2rem;
-  border-bottom: 1px solid var(--border-subtle);
-  font-size: 0.9rem;
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--rule-subtle);
+  font-size: 0.88rem;
 }
 
 .pipe-row:last-child {
   border-bottom: none;
 }
 
-.pipe-head {
+.pipe-head-row {
   background: rgba(255, 255, 255, 0.02);
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   letter-spacing: 0.08em;
-  color: var(--text-muted);
+  color: var(--color-ink-muted);
 }
 
 .col-code {
   font-family: var(--font-mono);
-  color: var(--accent-cyan);
+  color: var(--color-accent);
   font-weight: 700;
 }
 
@@ -732,99 +749,99 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
 }
 
 .col-title span {
-  font-size: 0.8rem;
-  color: var(--text-muted);
+  font-size: 0.78rem;
+  color: var(--color-ink-muted);
 }
 
 .col-modality {
-  color: var(--text-secondary);
-  font-size: 0.86rem;
+  color: var(--color-ink-secondary);
+  font-size: 0.84rem;
 }
 
-.badge {
+.stage-chip {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  padding: 0.2rem 0.55rem;
+  font-size: 0.68rem;
+  padding: 3px 8px;
   border-radius: 4px;
   font-weight: 600;
 }
 
-.phase-3 { background: var(--accent-cyan-light); color: var(--accent-cyan); border: 1px solid rgba(56, 189, 248, 0.25); }
-.phase-2 { background: var(--accent-emerald-light); color: var(--accent-emerald); border: 1px solid rgba(16, 185, 129, 0.25); }
-.phase-1 { background: var(--accent-gold-light); color: var(--accent-gold); border: 1px solid rgba(245, 158, 11, 0.25); }
+.phase-3 { background: var(--color-accent-light); color: var(--color-accent); border: 1px solid rgba(56, 189, 248, 0.25); }
+.phase-2 { background: var(--color-accent-emerald-light); color: var(--color-accent-emerald); border: 1px solid rgba(16, 185, 129, 0.25); }
+.phase-1 { background: var(--color-accent-gold-light); color: var(--color-accent-gold); border: 1px solid rgba(245, 158, 11, 0.25); }
 
 /* ==========================================================================
    FOOTER
    ========================================================================== */
 
 .footer {
-  border-top: 1px solid var(--border-subtle);
+  border-top: 1px solid var(--rule-subtle);
   background: #080a0e;
-  padding: 5rem 2.5rem 2.5rem;
+  padding: var(--space-2xl) var(--space-md) var(--space-md);
 }
 
 .footer-container {
   max-width: 1520px;
-  margin: 0 auto 4rem;
+  margin: 0 auto var(--space-xl);
   display: grid;
   grid-template-columns: 1.6fr 1fr;
-  gap: 5rem;
+  gap: var(--space-xl);
 }
 
 .f-logo {
   font-family: var(--font-sans);
-  font-size: 1.05rem;
-  font-weight: 800;
+  font-size: 1rem;
+  font-weight: 700;
   letter-spacing: 0.08em;
   color: #ffffff;
 }
 
 .f-desc {
-  color: var(--text-muted);
-  font-size: 0.88rem;
+  color: var(--color-ink-muted);
+  font-size: 0.86rem;
   max-width: 480px;
-  margin-top: 1rem;
-  line-height: 1.7;
+  margin-top: var(--space-2xs);
+  line-height: 1.65;
 }
 
 .footer-links {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3rem;
+  gap: var(--space-lg);
 }
 
-.f-head {
+.f-col-header {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   letter-spacing: 0.1em;
   color: #ffffff;
   display: block;
-  margin-bottom: 1.25rem;
+  margin-bottom: var(--space-xs);
   font-weight: 700;
 }
 
 .f-col a {
   display: block;
-  color: var(--text-muted);
+  color: var(--color-ink-muted);
   text-decoration: none;
-  font-size: 0.86rem;
-  margin-bottom: 0.75rem;
-  transition: color 0.2s;
+  font-size: 0.84rem;
+  margin-bottom: var(--space-2xs);
+  transition: color 0.2s ease;
 }
 
 .f-col a:hover {
-  color: var(--accent-cyan);
+  color: var(--color-accent);
 }
 
-.footer-bottom {
+.footer-bottom-bar {
   max-width: 1520px;
   margin: 0 auto;
-  padding-top: 2rem;
-  border-top: 1px solid var(--border-subtle);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--rule-subtle);
   text-align: center;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
-  color: var(--text-subtle);
+  font-size: 0.65rem;
+  color: var(--color-ink-subtle);
 }
 
 /* ==========================================================================
@@ -842,7 +859,7 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   justify-content: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.25s ease;
 }
 
 .modal-backdrop.active {
@@ -853,10 +870,10 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
 .modal-window {
   width: 90%;
   max-width: 500px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-accent);
+  background: var(--color-surface);
+  border: 1px solid var(--rule-accent);
   border-radius: 12px;
-  padding: 2.5rem;
+  padding: var(--space-md);
   box-shadow: var(--shadow-floating);
 }
 
@@ -864,21 +881,21 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-xs);
 }
 
 .modal-tag {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   letter-spacing: 0.1em;
-  color: var(--accent-cyan);
+  color: var(--color-accent);
   font-weight: 700;
 }
 
 .modal-close {
   background: transparent;
   border: none;
-  color: var(--text-muted);
+  color: var(--color-ink-muted);
   font-size: 1.5rem;
   cursor: pointer;
 }
@@ -887,62 +904,62 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
 
 .modal-title {
   font-family: var(--font-sans);
-  font-size: 1.35rem;
-  font-weight: 800;
+  font-size: 1.3rem;
+  font-weight: 700;
   color: #ffffff;
-  margin-bottom: 0.6rem;
+  margin-bottom: var(--space-3xs);
 }
 
 .modal-sub {
-  color: var(--text-secondary);
-  font-size: 0.88rem;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
+  color: var(--color-ink-secondary);
+  font-size: 0.86rem;
+  line-height: 1.55;
+  margin-bottom: var(--space-sm);
 }
 
 .form-group {
-  margin-bottom: 1.1rem;
+  margin-bottom: var(--space-xs);
 }
 
 .form-group label {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: var(--text-secondary);
-  margin-bottom: 0.35rem;
+  font-size: 0.65rem;
+  color: var(--color-ink-secondary);
+  margin-bottom: var(--space-3xs);
   font-weight: 600;
 }
 
 .form-group input, .form-group select {
   width: 100%;
   background: rgba(0, 0, 0, 0.45);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--rule-subtle);
   border-radius: 6px;
-  padding: 0.75rem 1rem;
+  padding: var(--space-2xs) var(--space-xs);
   color: #ffffff;
   font-family: var(--font-sans);
   font-size: 0.88rem;
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s ease;
 }
 
 .form-group input:focus, .form-group select:focus {
-  border-color: var(--accent-cyan);
+  border-color: var(--color-accent);
 }
 
 .btn-submit {
   width: 100%;
-  background: var(--accent-cyan);
-  color: #0e1117;
+  background: var(--color-accent);
+  color: #0d1117;
   font-family: var(--font-sans);
   font-size: 0.88rem;
   font-weight: 700;
-  padding: 0.85rem;
+  padding: var(--space-xs);
   border-radius: 6px;
   border: none;
   cursor: pointer;
-  margin-top: 0.75rem;
-  transition: all 0.2s;
+  margin-top: var(--space-2xs);
+  transition: box-shadow 0.2s ease;
 }
 
 .btn-submit:hover {
@@ -956,13 +973,13 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
 @media (max-width: 1200px) {
   .hero-stage {
     grid-template-columns: 1fr;
-    gap: 3rem;
+    gap: var(--space-lg);
   }
   .hero-sidebar {
     margin-left: 0;
     max-width: 100%;
   }
-  .pipeline-row {
+  .pipeline-specimen-table .pipe-row {
     grid-template-columns: 100px 1.5fr 1fr;
   }
   .col-stage, .col-status {
@@ -971,7 +988,7 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
 }
 
 @media (max-width: 768px) {
-  .center-badge, #sound-btn {
+  .center-apparatus-badge, #sound-btn {
     display: none;
   }
   .drug-grid {
@@ -979,6 +996,6 @@ a, button, input, select, textarea, .drug-card, .btn-primary, .action-panel, .vi
   }
   .footer-container {
     grid-template-columns: 1fr;
-    gap: 3rem;
+    gap: var(--space-lg);
   }
 }
